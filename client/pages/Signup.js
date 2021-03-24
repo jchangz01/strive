@@ -3,21 +3,32 @@ import { StyleSheet, Text, View, Keyboard } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Prompt from '../components/prompt'
 
-export default function Login({ logIn, navigation }) {
+export default function Login({ navigation }) {
+  const [username, setUsername] = React.useState('')
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [rePassword, setRePassword] = React.useState('');
 
-  const handleLogin = () => {
-      
+  const handleSignup = () => {
+    
   }
 
   return (
     <View style={styles.container} onTouchStart={() => Keyboard.dismiss()}>
         <Text style={styles.title}>STRIVE</Text>
-        <Prompt type="Log in" email={email} emailChange={(e) => setEmail(e)} pw={password} pwChange={(e) => setPassword(e)}/>
+        <Prompt 
+            type="Sign up" 
+            username={username}
+            usernameChange={(e) => setUsername(e)}
+            email={email} 
+            emailChange={(e) => setEmail(e)} 
+            pw={password} 
+            pwChange={(e) => setPassword(e)}
+            rePw={rePassword}
+            rePwChange={(e) => setRePassword(e)}/>
         <View style={styles.newUserView}>
-          <Text>Not a user?</Text>
-          <Text style={styles.newUser} onPress={() => navigation.navigate('Signup')}> Create an account!</Text>
+          <Text>Already a user?</Text>
+          <Text style={styles.newUser} onPress={() => navigation.navigate('Login')}> Log in!</Text>
         </View>
     </View>
   );
@@ -35,11 +46,6 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     marginBottom: 24,
   },
-  /*forgot_button: {
-    height: 30,
-    marginBottom: 30,
-  },*/
-  
   newUserView: {
     position: 'absolute',
     bottom: 16,
