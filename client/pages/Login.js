@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Keyboard } from 'react-native';
-import { NavigationEvents } from 'react-navigation';
 import Prompt from '../components/prompt'
 
 export default function Login({ logIn, navigation }) {
