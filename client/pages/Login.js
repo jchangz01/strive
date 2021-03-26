@@ -1,4 +1,6 @@
+import { useLinkProps } from '@react-navigation/native';
 import * as React from 'react';
+import { AsyncStorage } from 'react-native';
 import { StyleSheet, Text, View, Keyboard, Alert } from 'react-native';
 import Prompt from '../components/prompt'
 
@@ -6,7 +8,7 @@ export default function Login({ logIn, navigation }) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
 
   // send post request - URL is for dev env only
   await fetch('http://localhost:3000/auth/login', {
@@ -34,12 +36,8 @@ export default function Login({ logIn, navigation }) {
       }
       else
       {
-        // persist cookie for auth?
-        // https://locastic.com/blog/react-native-cookie-based-authentication/
-        // https://build.affinity.co/persisting-sessions-with-react-native-4c46af3bfd83
+          logIn();
       }
-
-
     });
   }
 

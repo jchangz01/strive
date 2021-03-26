@@ -18,7 +18,7 @@ export default function Home(props) {
         <View style={styles.profileDataContainer}>
           <View style={styles.profileDataView}>
             <Text style={styles.profileDataCount}>100</Text>
-            <Text style={styles.profileDataType}>Likes</Text>
+            <Text style={styles.profileDataType}>Completed</Text>
           </View>
           <View style={styles.profileDataView}>
             <Text style={styles.profileDataCount}>24</Text>
