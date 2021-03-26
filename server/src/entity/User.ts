@@ -1,23 +1,48 @@
-import { Entity, Column, PrimaryColumn, BeforeInsert, BaseEntity } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
-
 // user entity (table definition) in DB
+
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
+import * as argon2 from 'argon2';
+import 'reflect-metadata';
+
 // see https://github.com/typeorm/typeorm/issues/2797 for why we need exclamation marks
 @Entity()
-export class User extends BaseEntity
+export default class User
 {
-    @PrimaryColumn("uuid")
-    id!: string;                            // exclamation mark is non-null operator; this field CANNOT be null/undefined
+    @PrimaryGeneratedColumn("uuid") // generate UUID for each user
+    // exclamation mark is non-null operator; this field CANNOT be null/undefined
+    id!: string;
 
-    @Column("varchar", { length: 255 })     // type in decorator is type in DB
+    // type in decorator is type in DB
+    @Column("varchar", { length: 255, unique: true })
     email!: string;
 
-    @Column("text")                         // text type has no length limit
+    @Column("varchar", { length: 50 })
+    displayName!: string;
+
+    @Column("text") // text type has no length limit
     password!: string;
 
-    @BeforeInsert()                         // runs before the addition of a new user
-    addId()
+    @BeforeInsert()
+    async hashPassword()
     {
-        this.id = uuidv4();                 // set UUID for incoming new user
+        this.password = await argon2.hash(this.password, { type: argon2.argon2id });
+    }
+
+}
+
+// overwrite definition for Express.User type to match the type above
+// see passportAuthConfig and https://stackoverflow.com/questions/60981735/passport-express-typescript-req-user-email-undefined
+declare global
+{
+    namespace Express
+    {
+        interface User
+        {
+            id: string;
+            email: string;
+            displayName: string;
+            password: string;
+            hashPassword: () => Promise<void>;
+        }
     }
 }

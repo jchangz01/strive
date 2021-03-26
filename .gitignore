@@ -67,3 +67,6 @@ web-build/
 # Node
 node_modules
 .env
+
+# this project in particular
+server/dist
