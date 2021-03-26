@@ -1,18 +1,29 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 import Header from '../components/header'
+import Post from '../components/challengePost'
 
 export default function Home({ navigation }) {
+  const [input, setInput] = React.useState('');
+  const [challengePosts, setChallengePosts] = React.useState([]);
+
+  const handleSearch = (e) => {
+    setInput(e);
+    //enter fetch call here 
+    //set challengePosts to data retrieved (array of post's objects)
+
+  }
+
+
   return (
     <>
     <Header/>
-    <View style={styles.container}>
-      <Text>Home!</Text>
-      <Button
-        title="Go to Settings"
-        onPress={() => navigation.navigate('Profile')}
-      />
-    </View>
+    <ScrollView style={styles.container}>
+      <View style={{paddingHorizontal: 12}}>
+        <SearchBar value={input} onChangeText={handleSearch} platform='ios' placeholder='Search'></SearchBar>
+      </View>
+    </ScrollView>
     </>
   );
 }
@@ -21,7 +32,6 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 100,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
+    backgroundColor: 'white'
+  },
 })
