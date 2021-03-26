@@ -15,6 +15,7 @@ import passportAuthConfig from './passportAuthConfig';
 import AuthRouter from './routes/auth';
 import FeedRouter from './routes/feed';
 import UserRouter from './routes/user';
+import PostRouter from './routes/post';
 
 // init env vars
 dotenv.config({ path: __dirname + "/../.env"});
@@ -68,7 +69,7 @@ createConnection().then(async connection =>
     app.use('/auth', AuthRouter(passport));
     app.use('/feed', FeedRouter());
     app.use('/user', UserRouter());
-    
+    app.use('/post', PostRouter());
 
     // 404 route
     app.use((req: Request, res: Response) => res.status(404).json({ message: "route not found" }));

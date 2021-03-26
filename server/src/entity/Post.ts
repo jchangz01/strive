@@ -32,6 +32,12 @@ export default class Post
     @Column("uuid")
     owner!: string;
 
+    @Column("text")
+    ownerDisplayName!: string;
+
+    @Column("simple-array")
+    comments!: string;
+
     @CreateDateColumn()
     created!: Date;
 }

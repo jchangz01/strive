@@ -27,22 +27,22 @@ export default class User
     @CreateDateColumn()
     created!: Date;
 
-    // properties that CAN be null/undefined
+    // properties that CAN be empty but NOT null/undefined
 
     @Column("simple-array")
-    likedChallenges?: string[];
+    likedChallenges!: string[];
 
     @Column("simple-array")
-    joinedChallenges?: string[];
+    joinedChallenges!: string[];
 
     @Column("simple-array")
-    createdChallenges?: string[];
+    createdChallenges!: string[];
 
     @Column("simple-array")
-    completedChallenges?: string[];
+    completedChallenges!: string[];
 
     @Column("simple-array")
-    friends?: string[];
+    friends!: string[];
 
     // functions
 
@@ -66,10 +66,11 @@ declare global
             displayName: string;
             password: string;
             created: Date;
-            likedChallenges?: string[];
-            joinedChallenges?: string[];
-            createdChallenges?: string[];
-            completedChallenges?: string[];
+            likedChallenges: string[];
+            joinedChallenges: string[];
+            createdChallenges: string[];
+            completedChallenges: string[];
+            friends: string[];
             hashPassword: () => Promise<void>;
         }
     }

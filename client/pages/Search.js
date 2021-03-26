@@ -8,10 +8,25 @@ export default function Home({ navigation }) {
   const [input, setInput] = React.useState('');
   const [challengePosts, setChallengePosts] = React.useState([]);
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     setInput(e);
     //enter fetch call here 
     //set challengePosts to data retrieved (array of post's objects)
+
+    await fetch('http://localhost:3000/post/search', {
+      method: 'POST',
+      body: JSON.stringify({
+        query: input
+      }),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(resp => resp.json())
+    .then(resp =>
+      {
+        console.log("resp data", resp);
+        setChallengePosts(resp[0]);
+
+      });
 
   }
 

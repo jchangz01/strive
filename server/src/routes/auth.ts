@@ -30,6 +30,9 @@ export default function AuthRouter(passport: PassportStatic)
             }
             else
             {
+                // remove sensitive data from user info payload sent down
+                delete user.password;
+
                 req.login(user, err2 =>
                 {
                     if (err2)
@@ -38,7 +41,7 @@ export default function AuthRouter(passport: PassportStatic)
                     } 
                     else
                     {
-                        res.status(200).json({ message: "User successfully logged in", success: true });
+                        res.status(200).json({ data: user, success: true });
                     }
     
                 });

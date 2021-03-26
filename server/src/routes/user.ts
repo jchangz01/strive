@@ -66,7 +66,12 @@ export default function UserRouter()
         {
             // create new post and UUID
             const UUID = uuidv4();
-            const post = postRepo.create({ ...req.body, owner: req.params.id, id: UUID });
+            const post = postRepo.create({ 
+                ...req.body, 
+                owner: req.params.id,
+                ownerDisplayName: user.displayName, 
+                id: UUID 
+            });
 
             // update user createdChallenges list
             user.createdChallenges?.push(UUID);
