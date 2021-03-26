@@ -7,13 +7,14 @@ export default function Login({ logIn, navigation }) {
   const [password, setPassword] = React.useState('');
 
   const handleLogin = () => {
-      
+      console.log('meow')
+      //enter code here
   }
 
   return (
     <View style={styles.container} onTouchStart={() => Keyboard.dismiss()}>
         <Text style={styles.title}>STRIVE</Text>
-        <Prompt type="Log in" email={email} emailChange={(e) => setEmail(e)} pw={password} pwChange={(e) => setPassword(e)}/>
+        <Prompt type="Log in" email={email} emailChange={(e) => setEmail(e)} pw={password} pwChange={(e) => setPassword(e)} submit={handleLogin}/>
         <View style={styles.newUserView}>
           <Text>Not a user?</Text>
           <Text style={styles.newUser} onPress={() => navigation.navigate('Signup')}> Create an account!</Text>
@@ -34,11 +35,6 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     marginBottom: 24,
   },
-  /*forgot_button: {
-    height: 30,
-    marginBottom: 30,
-  },*/
-  
   newUserView: {
     position: 'absolute',
     bottom: 16,

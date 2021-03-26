@@ -10,7 +10,8 @@ export default function Login({ navigation }) {
   const [rePassword, setRePassword] = React.useState('');
 
   const handleSignup = () => {
-    
+    console.log('meow');
+    //enter code here 
   }
 
   return (
@@ -25,7 +26,8 @@ export default function Login({ navigation }) {
             pw={password} 
             pwChange={(e) => setPassword(e)}
             rePw={rePassword}
-            rePwChange={(e) => setRePassword(e)}/>
+            rePwChange={(e) => setRePassword(e)}
+            submit={handleSignup}/>
         <View style={styles.newUserView}>
           <Text>Already a user?</Text>
           <Text style={styles.newUser} onPress={() => navigation.navigate('Login')}> Log in!</Text>

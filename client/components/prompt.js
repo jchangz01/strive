@@ -23,7 +23,7 @@ export default function Prompt (props) {
                 </View>
                 : null
             }   
-            <TouchableOpacity style={styles.loginBtn}>
+            <TouchableOpacity style={styles.loginBtn} onPress={props.submit}>
                 <Text style={styles.loginText}>{props.type}</Text>
             </TouchableOpacity>
         </>
