@@ -1,4 +1,6 @@
+import { useLinkProps } from '@react-navigation/native';
 import * as React from 'react';
+import { Touchable } from 'react-native';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -10,50 +12,59 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 // 5) post likes
 // 6) post challengers count
 // 7) post duration
-export default function ChallengePost ({ postData }) {
+export default function challengePost ({detailedMode, children, navigation}) {
     return (
-        <View style={styles.postContainer}>
-            <View style={styles.postProfileView}>
-                <Icon name="user-circle" size={48} color='lightgray'/>
-                <View style={styles.postUserView}>
-                    <Text style={styles.postUsername}>{postData?.userName || "?"}</Text>
-                    <Text style={styles.postTime}>{postData?.createTime || "?"}</Text>
+        <TouchableOpacity activeOpacity={1} onPress={detailedMode ? null : () => navigation.navigate('PostDetail')}>
+            <View style={styles.postContainer}>
+                <View style={styles.postProfileView}>
+                    <Icon name="user-circle" size={48} color='lightgray'/>
+                    <View style={styles.postUserView}>
+                        <Text style={styles.postUsername}>Justin Kyle Chang</Text>
+                        <Text style={styles.postTime}>Duration: 1 week, 3/22/2021-3/29/2021</Text>
+                    </View>
+                </View>
+                <View style={styles.postChallengeView} >
+                    <Text style={styles.postTitle}>LA Hacks Hackathon</Text>
+                    <Text style={styles.postDes}>
+                    LA Hacks is the largest student-run hackathon in Southern California, 
+                    bringing together over a thousand hackers each year to create innovative solutions to modern problems. 
+                    Although LA Hacks is virtual this year, the core of our hackathon is still the same. Hackers will push 
+                    the boundaries of technology by creating trailblazing projects that showcase their skills and innovative 
+                    thinking. Join us online for a week of coding, panels, workshops and other fun activities from 
+                    March 21-28th, 2021. We hope to see you there!
+                    </Text>
+                </View>
+                <View style={styles.postDataContainer}>
+                    <View style={styles.postDataView}> 
+                        <Text style={styles.postDataCategory}>Likes</Text>
+                        <Text style={styles.postDataValue}>100</Text>
+                    </View>
+                    <View style={styles.verticleLine}></View>
+                    <View style={styles.postDataView}> 
+                        <Text style={styles.postDataCategory}>Challengers</Text>
+                        <Text style={styles.postDataValue}>5</Text>
+                    </View>
+                    <View style={styles.verticleLine}></View>
+                    
+                    <View style={styles.postDataView}> 
+                        <Text style={styles.postDataCategory}>Duration</Text>
+                        <Text style={styles.postDataValue}>1 week</Text>
+                    </View>
+                    
+                </View>
+                {children}
+                <View style={styles.postInteractiveView}>
+                    <TouchableOpacity><Icon name="thumbs-up" size={32} color="gray" border></Icon></TouchableOpacity>
+                    <View style={styles.verticleLine}></View>
+                    <Button title="Join Challenge" />
                 </View>
             </View>
-            <View style={styles.postChallengeView}>
-                <Text style={styles.postTitle}>{postData?.title || "?"}</Text>
-                <Text style={styles.postDes}>{postData?.description || "?"}</Text>
-            </View>
-            <View style={styles.postDataContainer}>
-                <View style={styles.postDataView}> 
-                    <Text style={styles.postDataCategory}>Likes</Text>
-                    <Text style={styles.postDataValue}>{postData?.likeCount || -1}</Text>
-                </View>
-                <View style={styles.verticleLine}></View>
-                <View style={styles.postDataView}> 
-                    <Text style={styles.postDataCategory}>Challengers</Text>
-                    <Text style={styles.postDataValue}>{postData?.challengerCount || -1}</Text>
-                </View>
-                <View style={styles.verticleLine}></View>
-                
-                <View style={styles.postDataView}> 
-                    <Text style={styles.postDataCategory}>Duration</Text>
-                    <Text style={styles.postDataValue}>{postData?.duration || "?"}</Text>
-                </View>
-                
-            </View>
-            <View style={styles.postInteractiveView}>
-                <TouchableOpacity><Icon name="thumbs-up" size={32} color="gray" border></Icon></TouchableOpacity>
-                <View style={styles.verticleLine}></View>
-                <Button title="Join Challenge" />
-            </View>
-        </View>
+        </TouchableOpacity>
     )
 }
-
+ 
 const styles = StyleSheet.create ({
     postContainer: {
-        height: 446,
         width: '100%',
         backgroundColor: 'white',
         borderTopColor: 'lightgray',
@@ -112,7 +123,7 @@ const styles = StyleSheet.create ({
     postDataValue: {
         fontSize: 28,
     },
-
+ 
     postInteractiveView: {
         display: 'flex',
         marginTop: 16,
@@ -123,7 +134,7 @@ const styles = StyleSheet.create ({
         paddingHorizontal: 24,
         backgroundColor: 'whitesmoke'
     },
-
+ 
     verticleLine: {
         height: '72%',
         width: 1,
@@ -132,3 +143,6 @@ const styles = StyleSheet.create ({
     },
     
 })
+
+
+
