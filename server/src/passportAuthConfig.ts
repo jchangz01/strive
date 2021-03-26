@@ -16,7 +16,7 @@ export default function initPassportAuth(passport: PassportStatic, connection: C
     const authenticateUser = async (email: string, password: string, done: Function) =>
     {
         // search users table for first occurrence of user that has the specified email
-        let user: User | undefined = await userRepo.findOne({ email: email });
+        let user = await userRepo.findOne({ email: email });
 
         if (!user)
         {

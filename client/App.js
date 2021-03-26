@@ -39,7 +39,11 @@ function Secured () {
 }
 
 export default function App () {
-  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+
+  // check cookie store to see if an auth cookie is present
+  // if it is, load all user data; if not, present login screen
+
   return ( 
   <NavigationContainer> 
     {loggedIn ? <Secured/> : <Authenticate/>} 

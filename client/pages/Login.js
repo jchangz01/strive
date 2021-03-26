@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, Keyboard, Alert } from 'react-native';
 import Prompt from '../components/prompt'
 
 export default function Login({ logIn, navigation }) {
@@ -7,8 +7,39 @@ export default function Login({ logIn, navigation }) {
   const [password, setPassword] = React.useState('');
 
   const handleLogin = () => {
-      console.log('meow')
-      //enter code here
+
+  // send post request - URL is for dev env only
+  await fetch('http://localhost:3000/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({
+      email: email,
+      password: password
+    }),
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .then(resp => resp.json())
+  .then(resp =>
+    {
+      console.log("login response", resp);
+
+      if (!resp.success)
+      {
+        Alert.alert(
+          "Login Failed",
+          resp.message,
+          [
+            { text: "OK" }
+          ]
+        );
+      }
+      else
+      {
+        // persist cookie for auth
+        
+      }
+
+
+    });
   }
 
   return (

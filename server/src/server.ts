@@ -14,6 +14,8 @@ import * as session from 'express-session';
 import User from './entity/User';
 import passportAuthConfig from './passportAuthConfig';
 
+import AuthRouter from './routes/auth';
+
 // init env vars
 dotenv.config({ path: __dirname + "/../.env"});
 console.log("DB_NAME", process.env.TYPEORM_DATABASE);
@@ -22,7 +24,7 @@ console.log("^^ if you see the correct host above, env vars are loaded");
 // init backend
 createConnection().then(async connection =>
 {
-    const userRepo = connection.getRepository(User);
+    //const userRepo = connection.getRepository(User);
 
     console.log("Database connection established");
 
@@ -63,29 +65,34 @@ createConnection().then(async connection =>
     console.log("Passport auth engine initialized");
 
     // register routes
+    app.use('/auth', AuthRouter(passport));
+
+
+    // 404 route
+    app.use((req: Request, res: Response) => res.status(404).json({ message: "route not found" }));
 
     // returns all users
-    app.get("/users", async function(req: Request, res: Response) {
-        const users = await userRepo.find();
-        res.json(users);
-    });
+    // app.get("/users", async function(req: Request, res: Response) {
+    //     const users = await userRepo.find();
+    //     res.json(users);
+    // });
 
-    // returns user by IDs
-    app.get("/users/:id", async function(req: Request, res: Response) {
-        const results = await userRepo.findOne(req.params.id);
-        return res.send(results);
-    });
+    // // returns user by IDs
+    // app.get("/users/:id", async function(req: Request, res: Response) {
+    //     const results = await userRepo.findOne(req.params.id);
+    //     return res.send(results);
+    // });
 
-    // save new user
-    app.post("/users", async function(req: Request, res: Response) {
+    // // save new user
+    // app.post("/users", async function(req: Request, res: Response) {
         
-        // create new user and persist to DB
-        const user = userRepo.create(req.body);
-        const results = await userRepo.save(user);
-        return res.send(results);
-    });
+    //     // create new user and persist to DB
+    //     const user = userRepo.create(req.body);
+    //     const results = await userRepo.save(user);
+    //     return res.send(results);
+    // });
 
-    // update user
+    // // update user
     // app.put("/users/:id", async function(req: Request, res: Response) {
     //     const user = await userRepo.findOne(req.params.id);
     //     userRepo.merge(user, req.body);
@@ -93,11 +100,11 @@ createConnection().then(async connection =>
     //     return res.send(results);
     // });
 
-    // delete user
-    app.delete("/users/:id", async function(req: Request, res: Response) {
-        const results = await userRepo.delete(req.params.id);
-        return res.send(results);
-    });
+    // // delete user
+    // app.delete("/users/:id", async function(req: Request, res: Response) {
+    //     const results = await userRepo.delete(req.params.id);
+    //     return res.send(results);
+    // });
 
     // start express server
     console.log(`Strive backend ready for requests on port ${process.env.PORT || 3000}`);

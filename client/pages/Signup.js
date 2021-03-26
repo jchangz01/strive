@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Keyboard } from 'react-native';
-import { NavigationEvents } from 'react-navigation';
+import { StyleSheet, Text, View, Keyboard, Alert } from 'react-native';
 import Prompt from '../components/prompt'
 
 export default function Login({ navigation }) {
@@ -9,9 +8,47 @@ export default function Login({ navigation }) {
   const [password, setPassword] = React.useState('');
   const [rePassword, setRePassword] = React.useState('');
 
-  const handleSignup = () => {
-    console.log('meow');
-    //enter code here git 
+  const handleSignup = async () => {
+
+    // make sure passwords match
+    if (rePassword !== password)
+    {
+      Alert.alert(
+        "Password Mismatch",
+        "The two passwords do not match. Please try again.",
+        [
+          { text: "OK" } /* OK button */
+        ]
+      );
+
+      console.log("ERROR ON SIGNUP - passwords do not match!");
+    }
+    else
+    {
+      // send post request - URL is for dev env only
+      await fetch('http://localhost:3000/auth/signup', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: email,
+          username: username,
+          password: password
+        }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(resp => resp.json())
+      .then(resp =>
+        {
+          console.log("signup response", resp);
+
+          Alert.alert(
+            resp.success ? "Account Created" : "Failed to Create Account",
+            resp.message,
+            [
+              { text: "OK" } /* OK button */
+            ]
+          );  
+        })
+    }
   }
 
   return (
