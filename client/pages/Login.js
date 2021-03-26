@@ -34,8 +34,9 @@ export default function Login({ logIn, navigation }) {
       }
       else
       {
-        // persist cookie for auth
-        
+        // persist cookie for auth?
+        // https://locastic.com/blog/react-native-cookie-based-authentication/
+        // https://build.affinity.co/persisting-sessions-with-react-native-4c46af3bfd83
       }
 
 

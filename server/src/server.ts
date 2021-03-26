@@ -11,10 +11,10 @@ import ExpressMySQLSession from 'express-mysql-session';
 import * as session from 'express-session';
 
 // internal imports
-import User from './entity/User';
 import passportAuthConfig from './passportAuthConfig';
-
 import AuthRouter from './routes/auth';
+import FeedRouter from './routes/feed';
+import UserRouter from './routes/user';
 
 // init env vars
 dotenv.config({ path: __dirname + "/../.env"});
@@ -66,7 +66,9 @@ createConnection().then(async connection =>
 
     // register routes
     app.use('/auth', AuthRouter(passport));
-
+    app.use('/feed', FeedRouter());
+    app.use('/user', UserRouter());
+    
 
     // 404 route
     app.use((req: Request, res: Response) => res.status(404).json({ message: "route not found" }));

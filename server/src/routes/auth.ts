@@ -31,17 +31,17 @@ export default function AuthRouter(passport: PassportStatic)
             else
             {
                 req.login(user, err2 =>
+                {
+                    if (err2)
                     {
-                        if (err2)
-                        {
-                            res.status(500).json({ message: err, success: false });
-                        } 
-                        else
-                        {
-                            res.status(200).json({ message: "User successfully logged in", success: true });
-                        }
-        
-                    });
+                        res.status(500).json({ message: err, success: false });
+                    } 
+                    else
+                    {
+                        res.status(200).json({ message: "User successfully logged in", success: true });
+                    }
+    
+                });
             }
         })(req, res, next); // NEED TO INVOKE IF WE HAVE IT WITHIN A ROUTE HANDLER!!
     });
