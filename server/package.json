@@ -14,7 +14,7 @@
   },
   "keywords": [],
   "author": "Duncan Applegarth, Justin Chang",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/AGuyWhoIsBored/strive/issues"
   },
@@ -27,15 +27,19 @@
     "express-session": "^1.17.1",
     "mysql": "^2.18.1",
     "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.31",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
+    "@types/express-mysql-session": "^2.1.2",
+    "@types/express-session": "^1.17.3",
     "@types/mysql": "^2.15.18",
-    "@types/node": "^14.14.35",
+    "@types/node": "^14.14.36",
     "@types/passport": "^1.0.6",
+    "@types/passport-local": "^1.0.33",
     "@types/uuid": "^8.3.0",
     "nodemon": "^2.0.7",
     "ts-node": "^9.1.1"
