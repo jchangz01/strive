@@ -42,7 +42,10 @@ export default class User
     completedChallenges!: string[];
 
     @Column("simple-array")
-    friends!: string[];
+    following!: string[];
+
+    @Column("simple-array")
+    followers!: string[];
 
     // functions
 
@@ -70,7 +73,8 @@ declare global
             joinedChallenges: string[];
             createdChallenges: string[];
             completedChallenges: string[];
-            friends: string[];
+            following: string[];
+            followers: string[];
             hashPassword: () => Promise<void>;
         }
     }

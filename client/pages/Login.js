@@ -4,7 +4,8 @@ import { AsyncStorage } from 'react-native';
 import { StyleSheet, Text, View, Keyboard, Alert } from 'react-native';
 import Prompt from '../components/prompt'
 
-export default function Login({ logIn, navigation }) {
+export default function Login({ route, navigation }) {
+
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -36,7 +37,9 @@ export default function Login({ logIn, navigation }) {
       }
       else
       {
-          logIn();
+        // change the view after the user is logged in
+        route.params.setUserData(resp.data);
+        route.params.updateSecured(true);
       }
     });
   }

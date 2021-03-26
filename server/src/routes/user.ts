@@ -22,37 +22,51 @@ export default function UserRouter()
         res.send(user);
     });
 
-    // add a friend - DOES NOT CHECK IF FRIEND IS ADDED
-    router.get("/:id/addFriend/:friendID", async (req: Request, res: Response) =>
+    // add a follower
+    router.get("/:id/follow/:friendID", async (req: Request, res: Response) =>
     {
         const user = await userRepo.findOne({ id: req.params.id });
+        const userToFollow = await userRepo.findOne({ id: req.params.friendID });
 
-        if (user)
+        if (user && userToFollow)
         {
-            user.friends?.push(req.params.friendID);
+            // add userToFollow to user's following
+            user.following.push(req.params.friendID);
             await userRepo.save(user);
+
+            // add user to userToFollow's followers
+            userToFollow.followers.push(req.params.id);
+            await userRepo.save(userToFollow);
+
             res.status(200).json({ message: "friend added", success: true });
         }
         else
         {
-            res.status(400).json({ message: "No user with the specified ID", success: false });
+            res.status(400).json({ message: "No user and/or no user to follow with the specified ID", success: false });
         }
     });
 
-    // remove a friend - DOES NOT CHECK IF FRIEND EXISTS
-    router.delete("/:id/delFriend/:friendID", async (req: Request, res: Response) =>
+    // remove a follower
+    router.delete("/:id/unfollow/:friendID", async (req: Request, res: Response) =>
     {
         const user = await userRepo.findOne({ id: req.params.id });
+        const userToUnfollow = await userRepo.findOne({ id: req.params.friendID });
 
-        if (user)
+        if (user && userToUnfollow)
         {
-            user.friends?.splice(user.friends?.indexOf(req.params.friendID), 1);
+            // remove userToFollow from user's following
+            user.following.splice(user.following.indexOf(req.params.friendID), 1);
             await userRepo.save(user);
+
+            // remove user from userToFollow's followers
+            userToUnfollow.followers.splice(userToUnfollow.followers.indexOf(req.params.id), 1);
+            await userRepo.save(userToUnfollow);
+
             res.status(200).json({ message: "friend removed", success: true });
         }
         else
         {
-            res.status(400).json({ message: "No user with the specified ID", success: false });
+            res.status(400).json({ message: "No user and/or no user to unfollow with the specified ID", success: false });
         }
     });
 

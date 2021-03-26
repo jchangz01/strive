@@ -25,14 +25,14 @@ export default function FeedRouter()
         // get user
         const user = await userRepo.findOne({ id: req.params.id });
 
-        if (user?.friends)
+        if (user?.following)
         {
             // get all friends
-            for (let idx = 0; idx < user.friends.length; idx++)
+            for (let idx = 0; idx < user.following.length; idx++)
             {
                 // get posts up to the challengeCount
                 let posts = await postRepo.createQueryBuilder("post")
-                .where("post.owner = :id", { id: user.friends[idx] })
+                .where("post.owner = :id", { id: user.following[idx] })
                 .orderBy({
                     'post.created': 'DESC'
                 })

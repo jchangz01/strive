@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Keyboard, Alert } from 'react-native';
 import Prompt from '../components/prompt'
 
-export default function Login({ logIn, navigation }) {
+export default function Login({ navigation }) {
   const [username, setUsername] = React.useState('')
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -44,10 +44,12 @@ export default function Login({ logIn, navigation }) {
           resp.success ? "Account Created" : "Failed to Create Account",
           resp.message,
           [
-            { text: "OK" } /* OK button */
+            { 
+              text: "OK",
+              onPress: () => { if (resp.success) navigation.navigate('Login'); }
+            } /* OK button */
           ]
-        );  
-        logIn();
+        );
       })
     }
   }

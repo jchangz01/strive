@@ -5,7 +5,7 @@ import { getConnection } from 'typeorm';
 import User from '../entity/User';
 import { PassportStatic } from 'passport';
 
-export default function AuthRouter(passport: PassportStatic)
+export default function AuthRouter(passport: PassportStatic, ENABLE_SESSIONS: string)
 {
     const router = Router();
 
@@ -16,37 +16,40 @@ export default function AuthRouter(passport: PassportStatic)
         {
             res.status(400).json({ message: "User already logged in", success: false });
         }
-
-        // attempt authentication
-        passport.authenticate('local', (err, user) =>
+        else
         {
-            if (err) 
-            { 
-                res.status(500).json({ message: err, success: false }); 
-            }
-            if (!user)
+            // attempt authentication
+            passport.authenticate('local', (err, user) =>
             {
-                res.status(400).json({ message: "Username and password combination incorrect", success: false });
-            }
-            else
-            {
-                // remove sensitive data from user info payload sent down
-                delete user.password;
-
-                req.login(user, err2 =>
+                if (err) 
+                { 
+                    res.status(500).json({ message: err, success: false }); 
+                }
+                if (!user)
                 {
-                    if (err2)
+                    res.status(400).json({ message: "Username and password combination incorrect", success: false });
+                }
+                else
+                {
+                    // remove sensitive data from user info payload sent down
+                    delete user.password;
+
+                    // temp
+                    if (ENABLE_SESSIONS === "true")
                     {
-                        res.status(500).json({ message: err, success: false });
-                    } 
-                    else
-                    {
-                        res.status(200).json({ data: user, success: true });
+                        req.login(user, err2 =>
+                        {
+                            if (err2)
+                            {
+                                res.status(500).json({ message: err, success: false });
+                                next();
+                            }
+                        });
                     }
-    
-                });
-            }
-        })(req, res, next); // NEED TO INVOKE IF WE HAVE IT WITHIN A ROUTE HANDLER!!
+                    res.status(200).json({ data: user, success: true });
+                }
+            })(req, res, next); // NEED TO INVOKE IF WE HAVE IT WITHIN A ROUTE HANDLER!!
+        }
     });
 
     // signup

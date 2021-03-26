@@ -2,42 +2,43 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default function Header () {
+// expecting the following w/in postData:
+// 1) display name of user who created the post
+// 2) created and finish times
+// 3) post title
+// 4) post description
+// 5) post likes
+// 6) post challengers count
+// 7) post duration
+export default function ChallengePost ({ postData }) {
     return (
         <View style={styles.postContainer}>
             <View style={styles.postProfileView}>
                 <Icon name="user-circle" size={48} color='lightgray'/>
                 <View style={styles.postUserView}>
-                    <Text style={styles.postUsername}>Justin Kyle Chang</Text>
-                    <Text style={styles.postTime}>Duration: 1 week, 3/22/2021-3/29/2021</Text>
+                    <Text style={styles.postUsername}>{postData?.userName || "?"}</Text>
+                    <Text style={styles.postTime}>{postData?.createTime || "?"}</Text>
                 </View>
             </View>
             <View style={styles.postChallengeView}>
-                <Text style={styles.postTitle}>LA Hacks Hackathon</Text>
-                <Text style={styles.postDes}>
-                LA Hacks is the largest student-run hackathon in Southern California, 
-                bringing together over a thousand hackers each year to create innovative solutions to modern problems. 
-                Although LA Hacks is virtual this year, the core of our hackathon is still the same. Hackers will push 
-                the boundaries of technology by creating trailblazing projects that showcase their skills and innovative 
-                thinking. Join us online for a week of coding, panels, workshops and other fun activities from 
-                March 21-28th, 2021. We hope to see you there!
-                </Text>
+                <Text style={styles.postTitle}>{postData?.title || "?"}</Text>
+                <Text style={styles.postDes}>{postData?.description || "?"}</Text>
             </View>
             <View style={styles.postDataContainer}>
                 <View style={styles.postDataView}> 
                     <Text style={styles.postDataCategory}>Likes</Text>
-                    <Text style={styles.postDataValue}>100</Text>
+                    <Text style={styles.postDataValue}>{postData?.likeCount || -1}</Text>
                 </View>
                 <View style={styles.verticleLine}></View>
                 <View style={styles.postDataView}> 
                     <Text style={styles.postDataCategory}>Challengers</Text>
-                    <Text style={styles.postDataValue}>5</Text>
+                    <Text style={styles.postDataValue}>{postData?.challengerCount || -1}</Text>
                 </View>
                 <View style={styles.verticleLine}></View>
                 
                 <View style={styles.postDataView}> 
                     <Text style={styles.postDataCategory}>Duration</Text>
-                    <Text style={styles.postDataValue}>1 week</Text>
+                    <Text style={styles.postDataValue}>{postData?.duration || "?"}</Text>
                 </View>
                 
             </View>

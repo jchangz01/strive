@@ -66,7 +66,7 @@ createConnection().then(async connection =>
     console.log("Passport auth engine initialized");
 
     // register routes
-    app.use('/auth', AuthRouter(passport));
+    app.use('/auth', AuthRouter(passport, process.env.ENABLE_SESSIONS!));
     app.use('/feed', FeedRouter());
     app.use('/user', UserRouter());
     app.use('/post', PostRouter());
