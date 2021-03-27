@@ -141,17 +141,21 @@ export default function UserRouter()
     router.get('/:id/join/:postID', async (req: Request, res: Response) =>
     {
         const user = await userRepo.findOne({ id: req.params.id });
+        const post = await postRepo.findOne({ id: req.params.postID });
 
-        if (user)
+        if (user && post)
         {
             user.joinedChallenges.push(req.params.postID);
+            post.challengers.push(req.params.id);
+
             await userRepo.save(user);
+            await postRepo.save(post);
 
             res.status(200).json({ message: "Joined post successfully", success: true });
         }
         else
         {
-            res.status(400).json({ message: "No user with the specified ID", success: false });
+            res.status(400).json({ message: "No user and/or post with the specified ID", success: false });
         }
     });
 
@@ -159,17 +163,21 @@ export default function UserRouter()
     router.get('/:id/leave/:postID', async (req: Request, res: Response) =>
     {
         const user = await userRepo.findOne({ id: req.params.id });
+        const post = await postRepo.findOne({ id: req.params.postID });
 
-        if (user)
+        if (user && post)
         {
             user.joinedChallenges?.splice(user.joinedChallenges?.indexOf(req.params.postID), 1);
+            post.challengers?.splice(post.challengers?.indexOf(req.params.id), 1);
+            
             await userRepo.save(user);
+            await postRepo.save(post);
 
             res.status(200).json({ message: "Left post successfully", success: true });
         }
         else
         {
-            res.status(400).json({ message: "No user with the specified ID", success: false });
+            res.status(400).json({ message: "No user and/or post with the specified ID", success: false });
         }
     });
 
@@ -177,17 +185,21 @@ export default function UserRouter()
     router.get('/:id/like/:postID', async (req: Request, res: Response) =>
     {
         const user = await userRepo.findOne({ id: req.params.id });
+        const post = await postRepo.findOne({ id: req.params.postID });
 
-        if (user)
+        if (user && post)
         {
             user.likedChallenges?.push(req.params.postID);
+            post.likes += 1;
+
             await userRepo.save(user);
+            await postRepo.save(post);
 
             res.status(200).json({ message: "Liked post successfully", success: true });
         }
         else
         {
-            res.status(400).json({ message: "No user with the specified ID", success: false });
+            res.status(400).json({ message: "No user and/or post with the specified ID", success: false });
         }
     });
 
@@ -195,17 +207,21 @@ export default function UserRouter()
     router.get('/:id/unlike/:postID', async (req: Request, res: Response) =>
     {
         const user = await userRepo.findOne({ id: req.params.id });
+        const post = await postRepo.findOne({ id: req.params.postID });
 
-        if (user)
+        if (user && post)
         {
             user.likedChallenges?.splice(user.likedChallenges?.indexOf(req.params.postID), 1);
+            post.likes -= 1;
+
             await userRepo.save(user);
+            await postRepo.save(post);
 
             res.status(200).json({ message: "Unliked post successfully", success: true });
         }
         else
         {
-            res.status(400).json({ message: "No user with the specified ID", success: false });
+            res.status(400).json({ message: "No user and/or post with the specified ID", success: false });
         }
     });
 

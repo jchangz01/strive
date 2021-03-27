@@ -50,7 +50,7 @@ export default function ChallengePost ({postData, detailedMode, children, naviga
                     <View style={styles.verticleLine}></View>
                     <View style={styles.postDataView}> 
                         <Text style={styles.postDataCategory}>Challengers</Text>
-                        <Text style={styles.postDataValue}>{postData?.challengers.length}</Text>
+                        <Text style={styles.postDataValue}>{postData?.challengers?.length}</Text>
                     </View>
                     <View style={styles.verticleLine}></View>
                     

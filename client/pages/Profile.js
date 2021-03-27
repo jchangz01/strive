@@ -8,7 +8,7 @@ import Post from '../components/challengePost'
 
 import { UserContext } from '../contexts/UserContext';
 
-export default function Home() {
+function ProfileScreen({ navigation }) {
 
   const context = React.useContext(UserContext);
 

@@ -4,6 +4,8 @@ import Header from '../components/header'
 import Post from '../components/challengePost'
 import Message from '../components/progressMessage'
 
+import { UserContext } from '../contexts/UserContext';
+
 function PersonalProgress () {
     return (
         <>
@@ -55,13 +57,18 @@ function UsersProgess () {
 }
 
 
-export default function ChallengePostDetails({postId, route, navigation}) {
-    const [postData, setPostData] = React.useState({});
+export default function ChallengePostDetails({ route, navigation }) {
+
+    console.log("loading post details for post", route.params.postId);
+
+    const context = React.useContext(UserContext);
+    const [postData, setPostData] = React.useState({ id: route.params.postId });
     const [updatePercentage, setupdatePercentage] = React.useState('');
     const [updateDes, setupdateDes] = React.useState('');
 
     React.useEffect(() => {
         const getPostData = async () => {
+
             await fetch('http://localhost:3000/post/get', {
                 method: 'POST',
                 body: JSON.stringify({ posts: [route.params.postId] }),
@@ -70,18 +77,18 @@ export default function ChallengePostDetails({postId, route, navigation}) {
             .then(resp => resp.json())
             .then(resp => {
                 console.log(resp)
-                setPostData(resp);
+                setPostData(resp[0]);
             })
         }
         getPostData();
-    }, [])
+    }, [context.userData]);
 
     return (
     <>
         <Header/>
         <View style={styles.container}>
             <ScrollView >    
-            <Post postData={postData[0]} detailedMode={true} navigation={navigation}>
+            <Post postData={postData} detailedMode={true} navigation={navigation}>
                 <View style={styles.postDetailSectionContainer}>
                     <Text style={styles.postDetailSectionTitle}>Your Progress</Text>
                     <PersonalProgress percentage={updatePercentage} changePercentage={e=>setupdatePercentage(e)} description={updateDes} setupdateDes={e=>setupdateDes(e)} />

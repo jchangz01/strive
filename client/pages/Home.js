@@ -52,7 +52,7 @@ function HomeScreen ({ route, navigation }) {
 
 //Standard navigation
 const HomeStack = createStackNavigator();
-export default function Home ({ route }) {
+export default function Home () {
   return(
     <HomeStack.Navigator screenOptions={{
       headerShown: false

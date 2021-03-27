@@ -6,6 +6,10 @@
 // https://reactjs.org/docs/context.html
 // https://medium.com/@danfyfe/using-react-context-with-functional-components-153cbd9ba214
 
+// slightly related:
+// https://stackoverflow.com/questions/49458226/react-native-react-navigation-rerender-panel-on-goback
+// https://reactnavigation.org/docs/params
+
 import * as React from 'react';
 
 export const UserContext = React.createContext(null);
