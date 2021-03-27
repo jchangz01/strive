@@ -6,7 +6,7 @@ import PostDetailScreen from '../screens/challengePostDetails'
 import Header from '../components/header'
 import Post from '../components/challengePost'
 
-function SearchScreen() {
+function SearchScreen({ navigation }) {
   const [input, setInput] = React.useState('');
   const [challengePosts, setChallengePosts] = React.useState([]);
 
@@ -39,7 +39,7 @@ function SearchScreen() {
 
   const postList = challengePosts.map(post =>
   {
-    return <Post key={post.id} postData={post} />
+    return <Post key={post.id} postData={post} navigation={navigation}/>
   });
 
   return (
