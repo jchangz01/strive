@@ -34,6 +34,7 @@ function Authenticate (props) {
   )
 } 
 
+import Test from './screens/createPost'
 //Provide bottom bar navigation
 const Tab = createBottomTabNavigator();
 function Secured (props) {
@@ -55,7 +56,7 @@ function Secured (props) {
 }
 
 export default function App () {
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(true);
   const [userData, setUserData] = React.useState(null);
 
   // check cookie store to see if an auth cookie is present

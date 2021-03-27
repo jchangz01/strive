@@ -5,6 +5,7 @@ console.log("Starting Strive backend");
 // external package imports
 import dotenv from 'dotenv';
 import express, { Application, Request, Response } from 'express';
+import * as cors from 'cors';
 import passport from 'passport';
 import { createConnection } from 'typeorm';
 import ExpressMySQLSession from 'express-mysql-session';
@@ -31,6 +32,7 @@ createConnection().then(async connection =>
 
     // create and setup express app
     const app: Application = express();
+    app.use(cors.default());
     app.use(express.json({ limit: '5mb' }));
     app.use(express.urlencoded({ limit: '5mb', extended: false }));
 
