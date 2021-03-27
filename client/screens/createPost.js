@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { Touchable } from 'react-native';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, Keyboard } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import DatePicker from 'react-native-datepicker'
 
 export default function CreatePost (props) {
+    const [title, setTitle] = React.useState('')
+    const [description, setDescription] = React.useState('')
+    const [date, setDate] = React.useState('')
     return (
         <>
             <View style={styles.headerContainer}>
@@ -13,20 +15,19 @@ export default function CreatePost (props) {
                     <Button title='Create'/>
                 </View>
             </View>
-            <ScrollView style={styles.container}>
-                <Text style={styles.heading}>New Challenge</Text>
-                <Text>Title</Text>
-                <TextInput/>
-                <Text>Description</Text>
-                <TextInput/>
-                <Text>Duration</Text>
-                <TextInput/>
-                <Text>Goal</Text>
-                <TextInput/>
-                <Text>Description</Text>
-                <TextInput/>
-                <Text>Description</Text>
-                <TextInput/>
+            <ScrollView style={styles.container} onScrollBeginDrag={() => Keyboard.dismiss()}>
+                <TextInput placeholder="Title" style={styles.postTitleInput}/>
+                <TextInput
+                    multiline={true}
+                    placeholder='Enter description...'
+                    textAlignVertical='bottom'
+                    style={styles.postDesInput}
+                />
+                <Text>Deadline</Text>
+                <DatePicker
+                    date={date}
+                    onDateChange={setDate}
+                />
             </ScrollView>
         </>
     )
@@ -54,11 +55,26 @@ const styles = StyleSheet.create ({
         marginTop: 100,
         paddingHorizontal: 24,
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+
     },
     heading: {
         marginTop: 16,
         fontSize: 24,
         fontWeight: 'bold'
+    },
+    postTitleInput: {
+        fontSize: 24,
+        marginTop: 16,
+        height: 40,
+        borderBottomColor: 'lightgray',
+        borderBottomWidth: 1
+    },
+    postDesInput: {
+        fontSize: 20,
+        marginTop: 16,
+        height: 400,
+        borderBottomColor: 'lightgray',
+        borderBottomWidth: 1
     }
 })
