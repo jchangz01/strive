@@ -47,7 +47,6 @@ function Secured (props) {
 
   return (
     <Tab.Navigator >
-      <Tab.Screen name="Test" component={Test} />
       <Tab.Screen name="Home" component={Home} initialParams={userParams} />
       <Tab.Screen name="Search" component={Search} initialParams={userParams}/>
       <Tab.Screen name="Challenges" component={Challenges} initialParams={userParams}/>

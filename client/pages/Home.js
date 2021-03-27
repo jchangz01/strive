@@ -4,8 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import PostDetailScreen from '../screens/challengePostDetails'
 import Header from '../components/header'
 import Post from '../components/challengePost'
-import { useLinkProps } from '@react-navigation/native';
-
 
 function HomeScreen (props) {
   const [challengePosts, setChallengePosts] = React.useState([])

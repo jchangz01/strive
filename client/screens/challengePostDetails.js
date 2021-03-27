@@ -55,17 +55,33 @@ function UsersProgess () {
 }
 
 
-export default function ChallengePostDetails({ navigation }) {
+export default function ChallengePostDetails({postId, route, navigation}) {
+    const [postData, setPostData] = React.useState({});
     const [updatePercentage, setupdatePercentage] = React.useState('');
     const [updateDes, setupdateDes] = React.useState('');
-    
+
+    React.useEffect(() => {
+        const getPostData = async () => {
+            await fetch('http://10.0.0.153:3000/post/get', {
+                method: 'POST',
+                body: JSON.stringify({ posts: [route.params.postId] }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(resp => resp.json())
+            .then(resp => {
+                console.log(resp)
+                setPostData(resp);
+            })
+        }
+        getPostData();
+    }, [])
 
     return (
     <>
         <Header/>
         <View style={styles.container}>
             <ScrollView >    
-            <Post detailedMode={true}>
+            <Post postData={postData[0]} detailedMode={true} navigation={navigation}>
                 <View style={styles.postDetailSectionContainer}>
                     <Text style={styles.postDetailSectionTitle}>Your Progress</Text>
                     <PersonalProgress percentage={updatePercentage} changePercentage={e=>setupdatePercentage(e)} description={updateDes} setupdateDes={e=>setupdateDes(e)} />

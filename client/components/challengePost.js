@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 // 7) post duration
 export default function ChallengePost ({postData, detailedMode, children, navigation}) {
     return (
-        <TouchableOpacity activeOpacity={1} onPress={detailedMode ? null : () => navigation.navigate('PostDetail')}>
+        <TouchableOpacity activeOpacity={1} onPress={detailedMode ? null : () => navigation.navigate('PostDetail', {postId: postData.id}) }>
             <View style={styles.postContainer}>
                 <View style={styles.postProfileView}>
                     <Icon name="user-circle" size={48} color='lightgray'/>
