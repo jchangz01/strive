@@ -35,22 +35,18 @@ function Authenticate (props) {
 
 //Provide bottom bar navigation
 const Tab = createBottomTabNavigator();
-function Secured (props) {
+function Secured () {
 
   const context = React.useContext(UserContext);
 
   console.log("userdata is", context.userData);
-  const userParams = {
-    userData: context.userData,
-    setUserData: context.setUserData
-  };
 
   return (
     <Tab.Navigator >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Search" component={Search} />
       <Tab.Screen name="Challenges" component={Challenges}/>
-      <Tab.Screen name="Profile" component={Profile} initialParams={userParams}/>
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 }

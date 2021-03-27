@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { createStackNavigator } from '@react-navigation/stack';
+import PostDetailScreen from '../screens/challengePostDetails'
 import Header from '../components/header'
-import Post from '../components/challengePost';
+import Post from '../components/challengePost'
 
 import { UserContext } from '../contexts/UserContext';
 
@@ -42,20 +44,21 @@ export default function Home() {
   
   const postList = createdPosts.map(post =>
   {
-    return <Post key={post.id} postData={post} />
+    return <Post key={post.id} postData={post} navigation={navigation}/>
   });
 
   return (
     <>
     <Header/>
-    <ScrollView style={styles.container}>
-        <View style={styles.profileView}>
-          <Icon name="user-circle" size={96} color='lightgray'/>
-          <View style={styles.profileUserView}>
-            <Text style={styles.profileUsername}>{profileInfo.username}</Text>
-            <Text style={styles.profileUserEmail}>{profileInfo.userEmail}</Text>
-          </View>
+    <ScrollView style={styles.container} stickyHeaderIndices={[1]}>
+      <View style={styles.profileView} >
+        <Icon name="user-circle" size={96} color='lightgray'/>
+        <View style={styles.profileUserView}>
+          <Text style={styles.profileUsername}>{profileInfo.username}</Text>
+          <Text style={styles.profileUserEmail}>{profileInfo.userEmail}</Text>
         </View>
+      </View>
+      <View>
         <View style={styles.profileDataContainer}>
           <View style={styles.profileDataView}>
             <Text style={styles.profileDataCount}>{profileInfo.completedChallengeCount}</Text>
@@ -70,6 +73,7 @@ export default function Home() {
             <Text style={styles.profileDataType}>Followers</Text>
           </View>
         </View>
+      </View>
         
         <Text style={styles.profileDataType}>Created Challenges</Text>
 
@@ -80,6 +84,19 @@ export default function Home() {
   );
 }
 
+//Standard navigation
+const ProfileStack = createStackNavigator();
+export default function Profile () {
+  return(
+    <ProfileStack.Navigator screenOptions={{
+      headerShown: false
+    }}>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen}></ProfileStack.Screen>
+      <ProfileStack.Screen name="PostDetail" component={PostDetailScreen}></ProfileStack.Screen>
+    </ProfileStack.Navigator>
+  )
+} 
+
 const styles = StyleSheet.create({
   container: {
     marginTop: 100,
@@ -88,7 +105,7 @@ const styles = StyleSheet.create({
   },
   profileView: {
     display: 'flex',
-    marginTop: 20,
+    marginVertical: 20,
     height: 100,
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -110,10 +127,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
-    marginTop: 20,
     width: '100%',
     backgroundColor: 'whitesmoke',
     height: 100,
+    marginBottom: 8,
     shadowColor: 'black',
     shadowOffset: { height: 2},
     shadowOpacity: 0.4,

@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import PostDetailScreen from '../screens/challengePostDetails'
 import Header from '../components/header'
 import Post from '../components/challengePost'
 
 import { UserContext } from '../contexts/UserContext';
 
-function currentChallengesScreen({ route }) {
+function currentChallengesScreen({ navigation }) {
 
   const context = React.useContext(UserContext);
   const [joinedChallenges, setJoinedChallenges] = React.useState([]);
@@ -33,7 +35,7 @@ function currentChallengesScreen({ route }) {
 
   const postList = joinedChallenges.map(post =>
   {
-    return <Post key={post.id} postData={post}/>
+    return <Post key={post.id} postData={post} navigation={navigation}/>
   });
 
   return (
@@ -43,7 +45,8 @@ function currentChallengesScreen({ route }) {
   );
 }
 
-function pastChallengesScreen() {
+function pastChallengesScreen({ navigation }) {
+  //implement past Challenges fetch
   return (
     <ScrollView style={{ flex: 1 }}>
 
@@ -51,10 +54,9 @@ function pastChallengesScreen() {
   );
 }
 
+//Top tab navigator to switch between past and current challenges
 const Tab = createMaterialTopTabNavigator();
-
-function MyTabs() {
-
+function ChallengeTabs(props) {
   return (
     <Tab.Navigator
       initialRouteName="Feed"
@@ -78,18 +80,29 @@ function MyTabs() {
   );
 }
 
-export default function App() {
-  
+function ChallengeScreen() {
   return (
     <>
     <Header/>
     <View style={styles.container}>
-      <MyTabs />
+      <ChallengeTabs />
     </View>
     </>
   );
 }
 
+//Standard navigation
+const ChallengesStack = createStackNavigator();
+export default function Challenges () {
+  return(
+    <ChallengesStack.Navigator screenOptions={{
+      headerShown: false
+    }}>
+      <ChallengesStack.Screen name="Challenge" component={ChallengeScreen}></ChallengesStack.Screen>
+      <ChallengesStack.Screen name="PostDetail" component={PostDetailScreen}></ChallengesStack.Screen>
+    </ChallengesStack.Navigator>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
