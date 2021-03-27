@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import PostDetailScreen from '../screens/challengePostDetails'
 import Header from '../components/header'
 import Post from '../components/challengePost'
 
-function currentChallengesScreen({ route }) {
+function currentChallengesScreen({ route, navigation }) {
 
   const [joinedChallenges, setJoinedChallenges] = React.useState([]);
 
@@ -15,13 +16,13 @@ function currentChallengesScreen({ route }) {
   {
     const getJoinedChallenges = async () =>
     {
-      console.log(`getting joined challenges for user with id ${route.params.userID}`)
+      console.log(`getting joined challenges for user with id fc56d0cc-374e-4eb5-9351-28fa5d42778e`)
 
-      await fetch(`http://localhost:3000/user/${route.params.userID}`)
+      await fetch(`http://10.0.0.153:3000/user/fc56d0cc-374e-4eb5-9351-28fa5d42778e`)
         .then(resp => resp.json())
         .then(async resp =>
         {
-          await fetch('http://localhost:3000/post/get', {
+          await fetch('http://10.0.0.153:3000/post/get', {
             method: 'POST',
             body: JSON.stringify({ posts: resp.joinedChallenges }),
             headers: { 'Content-Type': 'application/json' }
@@ -37,7 +38,7 @@ function currentChallengesScreen({ route }) {
 
   const postList = joinedChallenges.map(post =>
   {
-    return <Post key={post.id} postData={post} />
+    return <Post key={post.id} postData={post} navigation={navigation}/>
   });
 
   return (
@@ -47,7 +48,8 @@ function currentChallengesScreen({ route }) {
   );
 }
 
-function pastChallengesScreen() {
+function pastChallengesScreen({ navigation }) {
+  //implement past Challenges fetch
   return (
     <ScrollView style={{ flex: 1 }}>
       <Post/>
@@ -57,10 +59,9 @@ function pastChallengesScreen() {
   );
 }
 
+//Top tab navigator to switch between past and current challenges
 const Tab = createMaterialTopTabNavigator();
-
-function MyTabs(props) {
-
+function ChallengeTabs(props) {
   return (
     <Tab.Navigator
       initialRouteName="Feed"
@@ -86,18 +87,29 @@ function MyTabs(props) {
   );
 }
 
-export default function App({ route }) {
-  
+function ChallengeScreen({ route }) {
   return (
     <>
     <Header/>
     <View style={styles.container}>
-      <MyTabs userID={route.params.userData.id} />
+      <ChallengeTabs />
     </View>
     </>
   );
 }
 
+//Standard navigation
+const ChallengesStack = createStackNavigator();
+export default function Challenges () {
+  return(
+    <ChallengesStack.Navigator screenOptions={{
+      headerShown: false
+    }}>
+      <ChallengesStack.Screen name="Challenge" component={ChallengeScreen}></ChallengesStack.Screen>
+      <ChallengesStack.Screen name="PostDetail" component={PostDetailScreen}></ChallengesStack.Screen>
+    </ChallengesStack.Navigator>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {

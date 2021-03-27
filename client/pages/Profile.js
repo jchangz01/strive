@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { createStackNavigator } from '@react-navigation/stack';
+import PostDetailScreen from '../screens/challengePostDetails'
 import Header from '../components/header'
-import Post from '../components/challengePost';
+import Post from '../components/challengePost'
 
-export default function Home({ route }) {
+function ProfileScreen({ route, navigation }) {
 
   // get the user data
   const [profileInfo, setProfileInfo] = React.useState({});
@@ -16,10 +18,10 @@ export default function Home({ route }) {
   {
     const getUserData = async () =>
     {
-      console.log(`getting user data for profile screen with user ID ${route.params.userData.id}`)
+      console.log(`getting user data for profile screen with user ID fc56d0cc`)
 
       // first request to get the user data
-      await fetch(`http://localhost:3000/user/${route.params.userData.id}`)
+      await fetch(`http://10.0.0.153:3000/user/fc56d0cc-374e-4eb5-9351-28fa5d42778e`)
         .then(resp => resp.json())
         .then(async resp =>
         {
@@ -34,7 +36,7 @@ export default function Home({ route }) {
           console.log("getting created posts for profile screen");
 
           // second request to get all the posts 
-          await fetch(`http://localhost:3000/post/get`, {
+          await fetch(`http://10.0.0.153:3000/post/get`, {
             method: 'POST',
             body: JSON.stringify({ posts: resp.createdChallenges }),
             headers: { 'Content-Type': 'application/json' }
@@ -54,20 +56,21 @@ export default function Home({ route }) {
 
   const postList = createdPosts.map(post =>
   {
-    return <Post key={post.id} postData={post} />
+    return <Post key={post.id} postData={post} navigation={navigation}/>
   });
 
   return (
     <>
     <Header/>
-    <ScrollView style={styles.container}>
-        <View style={styles.profileView}>
-          <Icon name="user-circle" size={96} color='lightgray'/>
-          <View style={styles.profileUserView}>
-            <Text style={styles.profileUsername}>{profileInfo.username}</Text>
-            <Text style={styles.profileUserEmail}>{profileInfo.userEmail}</Text>
-          </View>
+    <ScrollView style={styles.container} stickyHeaderIndices={[1]}>
+      <View style={styles.profileView} >
+        <Icon name="user-circle" size={96} color='lightgray'/>
+        <View style={styles.profileUserView}>
+          <Text style={styles.profileUsername}>{profileInfo.username}</Text>
+          <Text style={styles.profileUserEmail}>{profileInfo.userEmail}</Text>
         </View>
+      </View>
+      <View>
         <View style={styles.profileDataContainer}>
           <View style={styles.profileDataView}>
             <Text style={styles.profileDataCount}>{profileInfo.completedChallengeCount}</Text>
@@ -82,13 +85,25 @@ export default function Home({ route }) {
             <Text style={styles.profileDataType}>Followers</Text>
           </View>
         </View>
-        
-        {postList}
-
+      </View> 
+      {postList}
     </ScrollView>
     </>
   );
 }
+
+//Standard navigation
+const ProfileStack = createStackNavigator();
+export default function Profile () {
+  return(
+    <ProfileStack.Navigator screenOptions={{
+      headerShown: false
+    }}>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen}></ProfileStack.Screen>
+      <ProfileStack.Screen name="PostDetail" component={PostDetailScreen}></ProfileStack.Screen>
+    </ProfileStack.Navigator>
+  )
+} 
 
 const styles = StyleSheet.create({
   container: {
@@ -98,7 +113,7 @@ const styles = StyleSheet.create({
   },
   profileView: {
     display: 'flex',
-    marginTop: 20,
+    marginVertical: 20,
     height: 100,
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -120,10 +135,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
-    marginTop: 20,
     width: '100%',
     backgroundColor: 'whitesmoke',
     height: 100,
+    marginBottom: 8,
     shadowColor: 'black',
     shadowOffset: { height: 2},
     shadowOpacity: 0.4,
