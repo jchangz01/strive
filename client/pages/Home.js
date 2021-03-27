@@ -14,7 +14,7 @@ function HomeScreen ({ route, navigation }) {
 
   React.useEffect( () => {
 
-    console.log("refetching feed", context.userData);
+    console.log("refetching feed");
 
     async function retrieveData() { 
       await fetch(`http://localhost:3000/feed/loadFeed/${context.userData.id}`)

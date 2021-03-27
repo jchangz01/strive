@@ -28,6 +28,74 @@ export default function ChallengePost ({postData, detailedMode, children, naviga
         setLiked(context.userData.likedChallenges?.includes(postData.id));
     }, [context.userData]);
 
+    const updateJoinStatus = async () =>
+    {
+        // update component state
+        setJoined(!joined);
+
+        // update backend and frontend user obj
+        if (joined)
+        {
+            await fetch(`http://localhost:3000/user/${context.userData.id}/leave/${postData.id}`)
+            .then(resp => resp.json())
+            .then(resp => console.log("resp after leave attempt", resp));
+
+            // make deep copy of user data, modify, then update state for the changes to propagate correctly
+            let newUserData = JSON.parse(JSON.stringify(context.userData));
+            newUserData.joinedChallenges.splice(newUserData.joinedChallenges.indexOf(postData.id), 1);
+            context.setUserData(newUserData);
+
+            console.log("left attempt done");
+        }
+        else
+        {
+            await fetch(`http://localhost:3000/user/${context.userData.id}/join/${postData.id}`)
+            .then(resp => resp.json())
+            .then(resp => console.log("resp after join attempt", resp));
+
+            // make deep copy of user data, modify, then update state for the changes to propagate correctly
+            let newUserData = JSON.parse(JSON.stringify(context.userData));
+            newUserData.joinedChallenges.push(postData.id);
+            context.setUserData(newUserData);
+
+            console.log("join attempt done");
+        }
+    }
+
+    const updateLikeStatus = async () =>
+    {
+        // update component state
+        setLiked(!liked);
+
+        // update backend and frontend user obj
+        if (liked)
+        {
+            await fetch(`http://localhost:3000/user/${context.userData.id}/unlike/${postData.id}`)
+            .then(resp => resp.json())
+            .then(resp => console.log("resp after leave attempt", resp));
+
+            // make deep copy of user data, modify, then update state for the changes to propagate correctly
+            let newUserData = JSON.parse(JSON.stringify(context.userData));
+            newUserData.likedChallenges.splice(newUserData.likedChallenges.indexOf(postData.id), 1);
+            context.setUserData(newUserData);
+
+            console.log("unlike attempt done");
+        }
+        else
+        {
+            await fetch(`http://localhost:3000/user/${context.userData.id}/like/${postData.id}`)
+            .then(resp => resp.json())
+            .then(resp => console.log("resp after join attempt", resp));
+
+            // make deep copy of user data, modify, then update state for the changes to propagate correctly
+            let newUserData = JSON.parse(JSON.stringify(context.userData));
+            newUserData.likedChallenges.push(postData.id);
+            context.setUserData(newUserData);
+
+            console.log("like attempt done");
+        }
+    }
+
     return (
         <TouchableOpacity activeOpacity={1} onPress={detailedMode ? null : () => navigation.navigate('PostDetail', {postId: postData.id}) }>
             <View style={styles.postContainer}>
@@ -62,10 +130,19 @@ export default function ChallengePost ({postData, detailedMode, children, naviga
                 </View>
                 {children}
                 <View style={styles.postInteractiveView}>
-                    <TouchableOpacity><Icon name="thumbs-up" size={32} color={liked ? "blue" : "gray"} border></Icon></TouchableOpacity>
+                    <TouchableOpacity>
+                        <Icon 
+                            name="thumbs-up" 
+                            size={32} 
+                            color={liked ? "blue" : "gray"} 
+                            border
+                            onPress={updateLikeStatus}
+                        ></Icon>
+                    </TouchableOpacity>
                     <View style={styles.verticleLine}></View>
                     <Button 
                         title={joined ? "Leave Challenge" : "Join Challenge"}
+                        onPress={updateJoinStatus}
                     />
                 </View>
             </View>
