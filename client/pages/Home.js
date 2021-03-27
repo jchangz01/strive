@@ -1,21 +1,27 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import PostDetailScreen from '../screens/challengePostDetails'
 import Header from '../components/header'
 import Post from '../components/challengePost'
 
-function HomeScreen (props) {
+import { UserContext } from '../contexts/UserContext';
+
+function HomeScreen ({ route, navigation }) {
+
+  const context = React.useContext(UserContext);
   const [challengePosts, setChallengePosts] = React.useState([])
 
   React.useEffect( () => {
+
+    console.log("refetching feed", context.userData);
+
     async function retrieveData() { 
-      await fetch('http://localhost:3000/feed/loadFeed/fc56d0cc-374e-4eb5-9351-28fa5d42778e')
+      await fetch(`http://localhost:3000/feed/loadFeed/${context.userData.id}`)
       .then(resp => resp.json())
       .then(resp =>
       {
         setChallengePosts(resp);
-        // at this point, resp is an array of posts - create a new Post component for each Post object in the resp array
       })
       .catch(function(error) {
         console.log('There has been a problem with your fetch operation: ' + error.message);
@@ -24,10 +30,14 @@ function HomeScreen (props) {
         }) 
     }
     retrieveData();
-  }, [])
+  }, [context.userData]);
 
-  const Posts = challengePosts.map((post, index) => {
-    return <Post postData={post} key={index} navigation={props.navigation} />
+  const Posts = challengePosts.map((post) => {
+    return <Post 
+      postData={post} 
+      key={post.id} 
+      navigation={navigation} 
+      />
   })
   
   return (
@@ -42,13 +52,19 @@ function HomeScreen (props) {
 
 //Standard navigation
 const HomeStack = createStackNavigator();
-export default function Home () {
+export default function Home ({ route }) {
   return(
     <HomeStack.Navigator screenOptions={{
       headerShown: false
     }}>
-      <HomeStack.Screen name="Home" component={HomeScreen}></HomeStack.Screen>
-      <HomeStack.Screen name="PostDetail" component={PostDetailScreen}></HomeStack.Screen>
+      <HomeStack.Screen 
+        name="Home" 
+        component={HomeScreen}
+      ></HomeStack.Screen>
+      <HomeStack.Screen 
+        name="PostDetail" 
+        component={PostDetailScreen}
+      ></HomeStack.Screen>
     </HomeStack.Navigator>
   )
 } 

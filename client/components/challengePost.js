@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Touchable } from 'react-native';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+import { UserContext } from '../contexts/UserContext';
 
 // expecting the following w/in postData:
 // 1) display name of user who created the post
@@ -12,6 +13,21 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 // 6) post challengers count
 // 7) post duration
 export default function ChallengePost ({postData, detailedMode, children, navigation}) {
+
+    console.log("display post with ID", postData.id);
+
+    const context = React.useContext(UserContext);
+    const [joined, setJoined] = React.useState(false);
+    const [liked, setLiked] = React.useState(false);
+
+    // do this to get around some weird issue where the Post wasn't rerendering on context change
+    // triggers a redundant rerender, but this'll work for us for now
+    React.useEffect(() =>
+    {
+        setJoined(context.userData.joinedChallenges?.includes(postData.id))
+        setLiked(context.userData.likedChallenges?.includes(postData.id));
+    }, [context.userData]);
+
     return (
         <TouchableOpacity activeOpacity={1} onPress={detailedMode ? null : () => navigation.navigate('PostDetail', {postId: postData.id}) }>
             <View style={styles.postContainer}>
@@ -46,9 +62,11 @@ export default function ChallengePost ({postData, detailedMode, children, naviga
                 </View>
                 {children}
                 <View style={styles.postInteractiveView}>
-                    <TouchableOpacity><Icon name="thumbs-up" size={32} color="gray" border></Icon></TouchableOpacity>
+                    <TouchableOpacity><Icon name="thumbs-up" size={32} color={liked ? "blue" : "gray"} border></Icon></TouchableOpacity>
                     <View style={styles.verticleLine}></View>
-                    <Button title="Join Challenge" />
+                    <Button 
+                        title={joined ? "Leave Challenge" : "Join Challenge"}
+                    />
                 </View>
             </View>
         </TouchableOpacity>

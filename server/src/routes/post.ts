@@ -8,7 +8,6 @@ export default function PostRouter()
 {
     const router = Router();
     const connection = getConnection();
-    //const userRepo = connection.getRepository(User);
     const postRepo = connection.getRepository(Post);
 
     // expect 1) query (search text)

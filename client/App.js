@@ -12,6 +12,8 @@ import Profile from './pages/Profile'
 import Login from './pages/Login';
 import Signup from './pages/Signup'
 
+import { UserContext } from './contexts/UserContext';
+
 //Standard navigation
 const Stack = createStackNavigator();
 function Authenticate (props) {
@@ -23,11 +25,8 @@ function Authenticate (props) {
     }}>
       <Stack.Screen 
         name="Login" 
-        component={Login} 
-        initialParams={{
-          updateSecured: props.updateSecured,
-          setUserData: props.setUserData
-        }}
+        component={Login}
+        initialParams={{updateSecured: props.updateSecured}}
       ></Stack.Screen>
       <Stack.Screen name="Signup" component={Signup}></Stack.Screen>
     </Stack.Navigator>
@@ -38,34 +37,42 @@ function Authenticate (props) {
 const Tab = createBottomTabNavigator();
 function Secured (props) {
 
-  console.log("userdata is", props.userData);
+  const context = React.useContext(UserContext);
+
+  console.log("userdata is", context.userData);
   const userParams = {
-    userData: props.userData,
-    setUserData: props.setUserData
+    userData: context.userData,
+    setUserData: context.setUserData
   };
 
   return (
     <Tab.Navigator >
-      <Tab.Screen name="Home" component={Home} initialParams={userParams} />
-      <Tab.Screen name="Search" component={Search} initialParams={userParams}/>
-      <Tab.Screen name="Challenges" component={Challenges} initialParams={userParams}/>
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Search" component={Search} />
+      <Tab.Screen name="Challenges" component={Challenges}/>
       <Tab.Screen name="Profile" component={Profile} initialParams={userParams}/>
     </Tab.Navigator>
   );
 }
 
 export default function App () {
+
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const [userData, setUserData] = React.useState(null);
+  const [uData, setUData] = React.useState(null);
 
   // check cookie store to see if an auth cookie is present
   // if it is, load all user data; if not, present login screen
 
   return ( 
-  <NavigationContainer> 
-    {
-      loggedIn ? <Secured userData={userData} setUserData={setUserData}/> : 
-      <Authenticate updateSecured={setLoggedIn} setUserData={setUserData}/>
-    } 
-  </NavigationContainer> )
+  <UserContext.Provider
+    value={{ userData: uData, setUserData: setUData }}  
+  >
+    <NavigationContainer> 
+      {
+        loggedIn ? <Secured /> : 
+        <Authenticate updateSecured={setLoggedIn}/>
+      } 
+    </NavigationContainer>
+  </UserContext.Provider>
+  );
 };

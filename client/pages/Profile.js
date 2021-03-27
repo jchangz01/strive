@@ -1,57 +1,45 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Header from '../components/header'
 import Post from '../components/challengePost';
 
-export default function Home({ route }) {
+import { UserContext } from '../contexts/UserContext';
 
-  // get the user data
+export default function Home() {
+
+  const context = React.useContext(UserContext);
+
   const [profileInfo, setProfileInfo] = React.useState({});
   const [createdPosts, setCreatedPosts] = React.useState([]);
 
-  // get user data
-  // cumbersome, but get the user data first, and then update the profile stuff accordingly
+  // update profile stuff accordingly
   React.useEffect(() =>
   {
-    const getUserData = async () =>
+    setProfileInfo({
+      username: context.userData.displayName,
+      userEmail: context.userData.email,
+      completedChallengeCount: context.userData.completedChallenges.length,
+      followerCount: context.userData.followers.length,
+      followingCount: context.userData.following.length
+    });
+
+    console.log("getting created posts for profile screen");
+
+    // second request to get all the posts 
+    const getPostsProfile = async () =>
     {
-      console.log(`getting user data for profile screen with user ID ${route.params.userData.id}`)
-
-      // first request to get the user data
-      await fetch(`http://localhost:3000/user/${route.params.userData.id}`)
-        .then(resp => resp.json())
-        .then(async resp =>
-        {
-          setProfileInfo({
-            username: resp.displayName,
-            userEmail: resp.email,
-            completedChallengeCount: resp.completedChallenges.length,
-            followerCount: resp.followers.length,
-            followingCount: resp.following.length
-          });
-
-          console.log("getting created posts for profile screen");
-
-          // second request to get all the posts 
-          await fetch(`http://localhost:3000/post/get`, {
-            method: 'POST',
-            body: JSON.stringify({ posts: resp.createdChallenges }),
-            headers: { 'Content-Type': 'application/json' }
-          })
-          .then(resp2 => resp2.json())
-          .then(resp2 => 
-          {
-            console.log("resp2", resp2);
-
-            setCreatedPosts(resp2);
-          });
-
-        });
+      await fetch(`http://localhost:3000/post/get`, {
+        method: 'POST',
+        body: JSON.stringify({ posts: context.userData.createdChallenges }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(resp => resp.json())
+      .then(resp => setCreatedPosts(resp));
     }
-    getUserData();
-  }, []);
-
+    getPostsProfile();
+  }, [context.userData]);
+  
   const postList = createdPosts.map(post =>
   {
     return <Post key={post.id} postData={post} />
@@ -83,6 +71,8 @@ export default function Home({ route }) {
           </View>
         </View>
         
+        <Text style={styles.profileDataType}>Created Challenges</Text>
+
         {postList}
 
     </ScrollView>

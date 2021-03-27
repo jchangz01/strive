@@ -19,6 +19,9 @@ export default function UserRouter()
     router.get("/:id", async (req: Request, res: Response) =>
     {
         const user = await userRepo.findOne({ id: req.params.id });
+
+        // TODO: REMOVE PASSWORD FROM USER OBJECT HERE
+
         res.send(user);
     });
 

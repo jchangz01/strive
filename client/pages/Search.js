@@ -6,31 +6,35 @@ import PostDetailScreen from '../screens/challengePostDetails'
 import Header from '../components/header'
 import Post from '../components/challengePost'
 
-function SearchScreen({ navigation }) {
+function SearchScreen() {
   const [input, setInput] = React.useState('');
   const [challengePosts, setChallengePosts] = React.useState([]);
 
   const handleSearch = async (e) => {
 
-    console.log("event", e);
-
+    console.log("searchQuery", e);
     setInput(e);
-    //enter fetch call here 
-    //set challengePosts to data retrieved (array of post's objects)
 
-    await fetch('http://10.0.0.153:3000/post/search', {
-      method: 'POST',
-      body: JSON.stringify({
-        query: e
-      }),
-      headers: { 'Content-Type': 'application/json' }
-    })
-    .then(resp => resp.json())
-    .then(resp =>
-      {
-        console.log("search results from backend", resp);
-        setChallengePosts(resp);
-      });
+    if (e)
+    {
+      await fetch('http://localhost:3000/post/search', {
+        method: 'POST',
+        body: JSON.stringify({
+          query: e
+        }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(resp => resp.json())
+      .then(resp =>
+        {
+          console.log("search results from backend", resp);
+          setChallengePosts(resp);
+        });
+    }
+    else
+    {
+      setChallengePosts([]);
+    }
   }
 
   const postList = challengePosts.map(post =>
