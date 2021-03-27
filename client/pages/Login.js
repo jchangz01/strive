@@ -1,6 +1,4 @@
-import { useLinkProps } from '@react-navigation/native';
 import * as React from 'react';
-import { AsyncStorage } from 'react-native';
 import { StyleSheet, Text, View, Keyboard, Alert } from 'react-native';
 import Prompt from '../components/prompt'
 
