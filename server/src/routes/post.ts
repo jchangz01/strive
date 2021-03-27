@@ -14,16 +14,25 @@ export default function PostRouter()
     // expect 1) query (search text)
     router.post('/search', async (req: Request, res: Response) =>
     {
-        let posts = await postRepo.createQueryBuilder("post")
+        if (req.body.query)
+        {
+            let posts = await postRepo.createQueryBuilder("post")
             .where("post.title LIKE :query", { query: `%${req.body.query}%` })
-            .getManyAndCount();
+            .getMany();
 
-        res.status(200).json(posts);
+            res.status(200).json(posts);
+        }
+        else
+        {
+            res.status(200).json([]);
+        }
     });
 
     // expects 1) posts[] <- arr of post UUIDs
     router.post('/get', async (req: Request, res: Response) =>
     {
+        console.log("hit post get");
+
         let posts: Post[] = [];
 
         for (let idx = 0; idx < req.body.posts?.length; idx++)
@@ -31,8 +40,14 @@ export default function PostRouter()
             const postID = req.body.posts[idx];
 
             let post = await postRepo.findOne({ id: postID });
-            posts.push(post!);
+
+            if (post)
+            {
+                posts.push(post);
+            }
         }
+
+        console.log("postsarr", posts);
 
         res.status(200).json(posts);
     });

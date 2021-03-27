@@ -11,6 +11,9 @@ function SearchScreen({ navigation }) {
   const [challengePosts, setChallengePosts] = React.useState([]);
 
   const handleSearch = async (e) => {
+
+    console.log("event", e);
+
     setInput(e);
     //enter fetch call here 
     //set challengePosts to data retrieved (array of post's objects)
@@ -18,21 +21,22 @@ function SearchScreen({ navigation }) {
     await fetch('http://10.0.0.153:3000/post/search', {
       method: 'POST',
       body: JSON.stringify({
-        query: input
+        query: e
       }),
       headers: { 'Content-Type': 'application/json' }
     })
     .then(resp => resp.json())
     .then(resp =>
       {
-        console.log("resp data", resp);
-        setChallengePosts(resp[0]);
+        console.log("search results from backend", resp);
+        setChallengePosts(resp);
       });
   }
 
-  const Posts = challengePosts.map((post, index) => {
-    return <Post postData={post} key={index} navigation={navigation} />
-  })
+  const postList = challengePosts.map(post =>
+  {
+    return <Post key={post.id} postData={post} />
+  });
 
   return (
     <>
@@ -41,7 +45,7 @@ function SearchScreen({ navigation }) {
       <View style={{paddingHorizontal: 12}}>
         <SearchBar value={input} onChangeText={handleSearch} platform='ios' placeholder='Search'></SearchBar>
       </View>
-      {Posts}
+      {postList}
     </ScrollView>
     </>
   );
