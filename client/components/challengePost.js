@@ -12,7 +12,7 @@ import { UserContext } from '../contexts/UserContext';
 // 5) post likes
 // 6) post challengers count
 // 7) post duration
-export default function ChallengePost ({postData, detailedMode, children, navigation}) {
+export default function ChallengePost ({postData, profileSelectOff, detailedMode, children, navigation}) {
 
     console.log("display post with ID", postData.id);
 
@@ -32,7 +32,12 @@ export default function ChallengePost ({postData, detailedMode, children, naviga
         <TouchableOpacity activeOpacity={1} onPress={detailedMode ? null : () => navigation.navigate('PostDetail', {postId: postData.id}) }>
             <View style={styles.postContainer}>
                 <View style={styles.postProfileView}>
-                    <Icon name="user-circle" size={48} color='lightgray'/>
+                    <TouchableOpacity 
+                        activeOpacity={profileSelectOff ? 1 : null}
+                        onPress={profileSelectOff ? null : () => navigation.navigate('ProfileDetail', {profileId: postData.owner})}
+                    >
+                        <Icon name="user-circle" size={48} color='lightgray'/>
+                    </TouchableOpacity>
                     <View style={styles.postUserView}>
                         <Text style={styles.postUsername}>{postData?.ownerDisplayName}</Text>
                         <Text style={styles.postTime}>Created on {postData?.created}</Text>

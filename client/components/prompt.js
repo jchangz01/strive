@@ -2,29 +2,29 @@ import * as React from 'react';
 import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity } from 'react-native';
 
 let refEmail, refPass, refRePass;
-export default function Prompt (props) {
+export default function Prompt ({username, usernameChange, email, emailChange, pw, pwChange, rePw, rePwChange, submit, type}) {
     return (
         <>
-            { props.type == 'Sign up' ?
+            { type == 'Sign up' ?
                 <View style={styles.inputView}>
-                    <TextInput placeholder="Username" value={props.username} onChangeText={props.usernameChange} onSubmitEditing={() => refEmail.focus()} style={styles.inputContent}></TextInput>
+                    <TextInput placeholder="Username" value={username} onChangeText={usernameChange} onSubmitEditing={() => refEmail.focus()} style={styles.inputContent}></TextInput>
                 </View>
                 : null
             }
             <View style={styles.inputView}>
-                <TextInput placeholder="Email" value={props.email} onChangeText={props.emailChange} keyboardType='email-address' ref={(input) => refEmail = input} onSubmitEditing={() => refPass.focus()} style={styles.inputContent}></TextInput>
+                <TextInput placeholder="Email" value={email} onChangeText={emailChange} keyboardType='email-address' ref={(input) => refEmail = input} onSubmitEditing={() => refPass.focus()} style={styles.inputContent}></TextInput>
             </View>
             <View style={styles.inputView}>
-                <TextInput placeholder="Password" value={props.pw} onChangeText={props.pwChange} secureTextEntry={true} ref={(input) => refPass = input} onSubmitEditing={() => refRePass?.focus()} style={styles.inputContent}></TextInput>    
+                <TextInput placeholder="Password" value={pw} onChangeText={pwChange} secureTextEntry={true} ref={(input) => refPass = input} onSubmitEditing={() => refRePass?.focus()} style={styles.inputContent}></TextInput>    
             </View>
-            { props.type == 'Sign up' ?
+            { type == 'Sign up' ?
                 <View style={styles.inputView}>
-                    <TextInput placeholder="Re-type Password" value={props.rePw} onChangeText={props.rePwChange} secureTextEntry={true} ref={(input) => refRePass = input} style={styles.inputContent}></TextInput>
+                    <TextInput placeholder="Re-type Password" value={rePw} onChangeText={rePwChange} secureTextEntry={true} ref={(input) => refRePass = input} style={styles.inputContent}></TextInput>
                 </View>
                 : null
             }   
-            <TouchableOpacity style={styles.loginBtn} onPress={props.submit}>
-                <Text style={styles.loginText}>{props.type}</Text>
+            <TouchableOpacity style={styles.loginBtn} onPress={submit}>
+                <Text style={styles.loginText}>{type}</Text>
             </TouchableOpacity>
         </>
     )

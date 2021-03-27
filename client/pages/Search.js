@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 import PostDetailScreen from '../screens/challengePostDetails'
+import ProfileDetailScreen from '../screens/profileDetails'
 import Header from '../components/header'
 import Post from '../components/challengePost'
 
@@ -63,8 +64,9 @@ export default function Search () {
     <SearchStack.Navigator screenOptions={{
       headerShown: false
     }}>
-      <SearchStack.Screen name="Search" component={SearchScreen}></SearchStack.Screen>
-      <SearchStack.Screen name="PostDetail" component={PostDetailScreen}></SearchStack.Screen>
+      <SearchStack.Screen name="Search" component={SearchScreen} />
+      <SearchStack.Screen name="PostDetail" component={PostDetailScreen} />
+      <SearchStack.Screen name="ProfileDetail" component={ProfileDetailScreen} />
     </SearchStack.Navigator>
   )
 } 

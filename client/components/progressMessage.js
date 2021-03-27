@@ -1,4 +1,3 @@
-import { useLinkProps } from '@react-navigation/native';
 import * as React from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 

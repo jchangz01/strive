@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import PostDetailScreen from '../screens/challengePostDetails'
+import ProfileDetailScreen from '../screens/profileDetails'
 import Header from '../components/header'
 import Post from '../components/challengePost'
 
@@ -98,8 +99,9 @@ export default function Challenges () {
     <ChallengesStack.Navigator screenOptions={{
       headerShown: false
     }}>
-      <ChallengesStack.Screen name="Challenge" component={ChallengeScreen}></ChallengesStack.Screen>
-      <ChallengesStack.Screen name="PostDetail" component={PostDetailScreen}></ChallengesStack.Screen>
+      <ChallengesStack.Screen name="Challenge" component={ChallengeScreen} />
+      <ChallengesStack.Screen name="PostDetail" component={PostDetailScreen} />
+      <ChallengesStack.Screen name="ProfileDetail" component={ProfileDetailScreen} />
     </ChallengesStack.Navigator>
   )
 }

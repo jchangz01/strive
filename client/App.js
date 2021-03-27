@@ -33,6 +33,7 @@ function Authenticate (props) {
   )
 } 
 
+import Test from './screens/profileDetails'
 //Provide bottom bar navigation
 const Tab = createBottomTabNavigator();
 function Secured () {

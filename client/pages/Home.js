@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import PostDetailScreen from '../screens/challengePostDetails'
+import ProfileDetailScreen from '../screens/profileDetails'
 import Header from '../components/header'
 import Post from '../components/challengePost'
 
@@ -57,14 +58,9 @@ export default function Home () {
     <HomeStack.Navigator screenOptions={{
       headerShown: false
     }}>
-      <HomeStack.Screen 
-        name="Home" 
-        component={HomeScreen}
-      ></HomeStack.Screen>
-      <HomeStack.Screen 
-        name="PostDetail" 
-        component={PostDetailScreen}
-      ></HomeStack.Screen>
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="PostDetail" component={PostDetailScreen} />
+      <HomeStack.Screen name="ProfileDetail" component={ProfileDetailScreen} />
     </HomeStack.Navigator>
   )
 } 
