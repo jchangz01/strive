@@ -5,10 +5,18 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Header from '../components/header'
 import Post from '../components/challengePost'
 
-function currentChallengesScreen() {
+function currentChallengesScreen({ route }) {
+
+  console.log("posts in curchallengescreen", route.params.posts);
+
+  const postList = route.params.posts.map(post =>
+  {
+    return <Post data={post} />
+  });
+
   return (
     <ScrollView style={{ flex: 1 }}>
-      <Post/>
+      {postList}
     </ScrollView>
   );
 }
@@ -25,7 +33,10 @@ function pastChallengesScreen() {
 
 const Tab = createMaterialTopTabNavigator();
 
-function MyTabs() {
+function MyTabs(props) {
+
+  console.log("posts", props.posts);
+
   return (
     <Tab.Navigator
       initialRouteName="Feed"
@@ -39,6 +50,8 @@ function MyTabs() {
         name="Current"
         component={currentChallengesScreen}
         options={{ tabBarLabel: 'Current' }}
+
+        initialParams={{ posts: props.posts }}
       />
       <Tab.Screen
         name="Past"
@@ -48,12 +61,34 @@ function MyTabs() {
     </Tab.Navigator>
   );
 }
-export default function App() {
+
+export default function App({ route }) {
+
+  const [joinedChallenges, setJoinedChallenges] = React.useState([]);
+
+  // get all joined challenges from user
+  React.useEffect(() =>
+  {
+    const getJoinedChallenges = async () =>
+    {
+      await fetch('http://localhost:3000/post/get', {
+        method: 'POST',
+        body: JSON.stringify({ posts: route.params.userData.joinedChallenges }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(resp => resp.json())
+      .then(resp => {
+        setJoinedChallenges(resp); 
+      });
+    }
+    getJoinedChallenges();
+  }, []);
+  
   return (
     <>
     <Header/>
     <View style={styles.container}>
-      <MyTabs/>
+      <MyTabs posts={joinedChallenges}/>
     </View>
     </>
   );

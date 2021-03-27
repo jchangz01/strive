@@ -1,11 +1,7 @@
 // all routes relating to posts
 
-// make a route to get X amount of posts based on post IDs
-// make a search route for posts
-
 import { Request, Response, Router } from 'express';
 import { getConnection } from 'typeorm';
-import User from '../entity/User';
 import Post from '../entity/Post';
 
 export default function PostRouter()
@@ -21,6 +17,22 @@ export default function PostRouter()
         let posts = await postRepo.createQueryBuilder("post")
             .where("post.title LIKE :query", { query: `%${req.body.query}%` })
             .getManyAndCount();
+
+        res.status(200).json(posts);
+    });
+
+    // expects 1) posts[] <- arr of post UUIDs
+    router.post('/get', async (req: Request, res: Response) =>
+    {
+        let posts: Post[] = [];
+
+        for (let idx = 0; idx < req.body.posts?.length; idx++)
+        {
+            const postID = req.body.posts[idx];
+
+            let post = await postRepo.findOne({ id: postID });
+            posts.push(post!);
+        }
 
         res.status(200).json(posts);
     });

@@ -70,6 +70,7 @@ export default function UserRouter()
         }
     });
 
+    // create a new challenge
     // expecting POST request to include:
     // 1) title, description, duration
     router.post('/:id/newPost', async (req: Request, res: Response) =>
@@ -87,8 +88,9 @@ export default function UserRouter()
                 id: UUID 
             });
 
-            // update user createdChallenges list
+            // update user createdChallenges and joinedChallenges list
             user.createdChallenges?.push(UUID);
+            user.joinedChallenges?.push(UUID);
             
             await postRepo.save(post);
             await userRepo.save(user);
@@ -101,7 +103,7 @@ export default function UserRouter()
         }  
     });
 
-    // delete post
+    // delete existing challenge
     router.delete('/:id/delPost/:postID', async (req: Request, res: Response) =>
     {
         const user = await userRepo.findOne({ id: req.params.id });
@@ -125,6 +127,78 @@ export default function UserRouter()
             {
                 res.status(400).json({ message: "No post with the specified ID", success: false });
             }
+        }
+        else
+        {
+            res.status(400).json({ message: "No user with the specified ID", success: false });
+        }
+    });
+
+    // join another challenge - DOES NOT CHECK IF POST EXISTS
+    router.get('/:id/join/:postID', async (req: Request, res: Response) =>
+    {
+        const user = await userRepo.findOne({ id: req.params.id });
+
+        if (user)
+        {
+            user.joinedChallenges.push(req.params.postID);
+            await userRepo.save(user);
+
+            res.status(200).json({ message: "Joined post successfully", success: true });
+        }
+        else
+        {
+            res.status(400).json({ message: "No user with the specified ID", success: false });
+        }
+    });
+
+    // leave a challenge - DOES NOT CHECK IF POST EXISTS OR IF IT IS IN THE JOINEDCHALLENGES ARR
+    router.get('/:id/leave/:postID', async (req: Request, res: Response) =>
+    {
+        const user = await userRepo.findOne({ id: req.params.id });
+
+        if (user)
+        {
+            user.joinedChallenges?.splice(user.joinedChallenges?.indexOf(req.params.postID), 1);
+            await userRepo.save(user);
+
+            res.status(200).json({ message: "Left post successfully", success: true });
+        }
+        else
+        {
+            res.status(400).json({ message: "No user with the specified ID", success: false });
+        }
+    });
+
+    // like a challenge - DOES NOT CHECK IF POST EXISTS
+    router.get('/:id/like/:postID', async (req: Request, res: Response) =>
+    {
+        const user = await userRepo.findOne({ id: req.params.id });
+
+        if (user)
+        {
+            user.likedChallenges?.push(req.params.postID);
+            await userRepo.save(user);
+
+            res.status(200).json({ message: "Liked post successfully", success: true });
+        }
+        else
+        {
+            res.status(400).json({ message: "No user with the specified ID", success: false });
+        }
+    });
+
+    // unlike a challenge - DOESNT CHECK IF POST EXISTS OR IF ITS ALREADY BEEN UNLIKED
+    router.get('/:id/unlike/:postID', async (req: Request, res: Response) =>
+    {
+        const user = await userRepo.findOne({ id: req.params.id });
+
+        if (user)
+        {
+            user.likedChallenges?.splice(user.likedChallenges?.indexOf(req.params.postID), 1);
+            await userRepo.save(user);
+
+            res.status(200).json({ message: "Unliked post successfully", success: true });
         }
         else
         {
