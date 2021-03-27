@@ -7,11 +7,37 @@ import Post from '../components/challengePost'
 
 function currentChallengesScreen({ route }) {
 
-  console.log("posts in curchallengescreen", route.params.posts);
+  const [joinedChallenges, setJoinedChallenges] = React.useState([]);
 
-  const postList = route.params.posts.map(post =>
+  // get all joined challenges from user
+  // cumbersome, but get the user data first, and then and joined challenges
+  React.useEffect(() =>
   {
-    return <Post data={post} />
+    const getJoinedChallenges = async () =>
+    {
+      console.log(`getting joined challenges for user with id ${route.params.userID}`)
+
+      await fetch(`http://localhost:3000/user/${route.params.userID}`)
+        .then(resp => resp.json())
+        .then(async resp =>
+        {
+          await fetch('http://localhost:3000/post/get', {
+            method: 'POST',
+            body: JSON.stringify({ posts: resp.joinedChallenges }),
+            headers: { 'Content-Type': 'application/json' }
+          })
+          .then(resp2 => resp2.json())
+          .then(resp2 => {
+            setJoinedChallenges(resp2); 
+          });
+        });
+    }
+    getJoinedChallenges();
+  }, []);
+
+  const postList = joinedChallenges.map(post =>
+  {
+    return <Post key={post.id} postData={post} />
   });
 
   return (
@@ -35,60 +61,38 @@ const Tab = createMaterialTopTabNavigator();
 
 function MyTabs(props) {
 
-  console.log("posts", props.posts);
-
   return (
     <Tab.Navigator
       initialRouteName="Feed"
       tabBarOptions={{
         activeTintColor: 'gray',
         labelStyle: { fontSize: 12 },
-        style: { backgroundColor: 'white',  },
+        style: { backgroundColor: 'white', },
       }}
     >
       <Tab.Screen
         name="Current"
         component={currentChallengesScreen}
         options={{ tabBarLabel: 'Current' }}
-
-        initialParams={{ posts: props.posts }}
+        initialParams={{ userID: props.userID }}
       />
       <Tab.Screen
         name="Past"
         component={pastChallengesScreen}
         options={{ tabBarLabel: 'Past' }}
+        initialParams={{ userID: props.userID }}
       />
     </Tab.Navigator>
   );
 }
 
 export default function App({ route }) {
-
-  const [joinedChallenges, setJoinedChallenges] = React.useState([]);
-
-  // get all joined challenges from user
-  React.useEffect(() =>
-  {
-    const getJoinedChallenges = async () =>
-    {
-      await fetch('http://localhost:3000/post/get', {
-        method: 'POST',
-        body: JSON.stringify({ posts: route.params.userData.joinedChallenges }),
-        headers: { 'Content-Type': 'application/json' }
-      })
-      .then(resp => resp.json())
-      .then(resp => {
-        setJoinedChallenges(resp); 
-      });
-    }
-    getJoinedChallenges();
-  }, []);
   
   return (
     <>
     <Header/>
     <View style={styles.container}>
-      <MyTabs posts={joinedChallenges}/>
+      <MyTabs userID={route.params.userData.id} />
     </View>
     </>
   );

@@ -12,7 +12,7 @@ function HomeScreen (props) {
 
   React.useEffect( () => {
     async function retrieveData() { 
-      await fetch('http://10.0.0.153:3000/feed/loadFeed/fc56d0cc-374e-4eb5-9351-28fa5d42778e')
+      await fetch('http://localhost:3000/feed/loadFeed/fc56d0cc-374e-4eb5-9351-28fa5d42778e')
       .then(resp => resp.json())
       .then(resp =>
       {

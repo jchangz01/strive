@@ -9,6 +9,9 @@ export default function Home({ navigation }) {
   const [challengePosts, setChallengePosts] = React.useState([]);
 
   const handleSearch = async (e) => {
+
+    console.log("event", e);
+
     setInput(e);
     //enter fetch call here 
     //set challengePosts to data retrieved (array of post's objects)
@@ -16,19 +19,22 @@ export default function Home({ navigation }) {
     await fetch('http://localhost:3000/post/search', {
       method: 'POST',
       body: JSON.stringify({
-        query: input
+        query: e
       }),
       headers: { 'Content-Type': 'application/json' }
     })
     .then(resp => resp.json())
     .then(resp =>
       {
-        console.log("resp data", resp);
-        setChallengePosts(resp[0]);
-
+        console.log("search results from backend", resp);
+        setChallengePosts(resp);
       });
-
   }
+
+  const postList = challengePosts.map(post =>
+  {
+    return <Post key={post.id} postData={post} />
+  });
 
   return (
     <>
@@ -37,6 +43,9 @@ export default function Home({ navigation }) {
       <View style={{paddingHorizontal: 12}}>
         <SearchBar value={input} onChangeText={handleSearch} platform='ios' placeholder='Search'></SearchBar>
       </View>
+
+      {postList}
+
     </ScrollView>
     </>
   );

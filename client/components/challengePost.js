@@ -135,6 +135,3 @@ const styles = StyleSheet.create ({
     },
     
 })
-
-
-
