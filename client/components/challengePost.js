@@ -36,7 +36,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         // update backend and frontend user obj
         if (joined)
         {
-            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/leave/${postData.id}`)
+            await fetch(`http://localhost:3000/user/${context.userData.id}/leave/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after leave attempt", resp));
 
@@ -49,7 +49,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         }
         else
         {
-            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/join/${postData.id}`)
+            await fetch(`http://localhost:3000/user/${context.userData.id}/join/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after join attempt", resp));
 
@@ -70,7 +70,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         // update backend and frontend user obj
         if (liked)
         {
-            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/unlike/${postData.id}`)
+            await fetch(`http://localhost:3000/user/${context.userData.id}/unlike/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after leave attempt", resp));
 
@@ -83,7 +83,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         }
         else
         {
-            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/like/${postData.id}`)
+            await fetch(`http://localhost:3000/user/${context.userData.id}/like/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after join attempt", resp));
 
@@ -108,7 +108,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
                     </TouchableOpacity>
                     <View style={styles.postUserView}>
                         <Text style={styles.postUsername}>{postData?.ownerDisplayName}</Text>
-                        <Text style={styles.postTime}>Created on {postData?.created}</Text>
+                        <Text style={styles.postTime}>{new Date(parseInt(postData?.created)).toLocaleString() + " - " + new Date(parseInt(postData?.finishDate)).toLocaleString()}</Text>
                     </View>
                 </View>
                 <View style={styles.postChallengeView} >

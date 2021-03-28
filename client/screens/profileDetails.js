@@ -11,13 +11,13 @@ export default function ProfileDetails({ route, navigation }) {
 
     React.useEffect(() => {
         const getProfileData = async () => {
-            await fetch(`http://10.0.0.153:3000/user/${route.params.profileId}`)
+            await fetch(`http://localhost:3000/user/${route.params.profileId}`)
             .then(resp => resp.json())
             .then(resp => {
                 console.log("profileview userdata", resp);
                 setProfileInfo(resp);
 
-                fetch(`http://10.0.0.153:3000/post/get`, {
+                fetch(`http://localhost:3000/post/get`, {
                     method: 'POST',
                     body: JSON.stringify({ posts: resp.createdChallenges }),
                     headers: { 'Content-Type': 'application/json' }

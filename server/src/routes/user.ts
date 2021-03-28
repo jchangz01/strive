@@ -254,7 +254,7 @@ export default function UserRouter()
             const idx = post.challengers?.map(e => e.id).indexOf(req.params.id);
 
             post.challengers[idx].progress = req.body.progress;
-            post.challengers[idx].blurb = req.body.progress;
+            post.challengers[idx].blurb = req.body.blurb;
             post.challengers[idx].blurbUpdateTime = new Date().getTime();
 
             await postRepo.save(post);
