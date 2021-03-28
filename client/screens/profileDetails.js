@@ -14,15 +14,8 @@ export default function ProfileDetails({ route, navigation }) {
             await fetch(`http://localhost:3000/user/${route.params.profileId}`)
             .then(resp => resp.json())
             .then(resp => {
-                console.log(resp)
-                setProfileInfo({
-                    id: resp.id,
-                    username: resp.displayName,
-                    userEmail: resp.email,
-                    completedChallengeCount: resp.completedChallenges.length,
-                    followerCount: resp.followers.length,
-                    followingCount: resp.following.length
-                });
+                console.log("profileview userdata", resp);
+                setProfileInfo(resp);
 
                 fetch(`http://localhost:3000/post/get`, {
                     method: 'POST',

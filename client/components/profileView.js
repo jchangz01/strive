@@ -65,8 +65,8 @@ export default function ProfileView ({ personalProfile, profileInfo, createdPost
           <View style={styles.profileView} >
           <Icon name="user-circle" size={96} color='lightgray'/>
               <View style={styles.profileUserView}>
-                  <Text style={styles.profileUsername}>{profileInfo?.username}</Text>
-                  <Text style={styles.profileUserEmail}>{profileInfo?.userEmail}</Text>
+                  <Text style={styles.profileUsername}>{profileInfo?.displayName}</Text>
+                  <Text style={styles.profileUserEmail}>{profileInfo?.email}</Text>
                   {
                     personalProfile ? null :
                     ( following ?
@@ -83,15 +83,15 @@ export default function ProfileView ({ personalProfile, profileInfo, createdPost
           <View>
           <View style={styles.profileDataContainer}>
               <View style={styles.profileDataView}>
-                  <Text style={styles.profileDataCount}>{profileInfo?.completedChallengeCount}</Text>
+                  <Text style={styles.profileDataCount}>{profileInfo?.completedChallenges.length}</Text>
                   <Text style={styles.profileDataType}>Completed</Text>
               </View>
               <View style={styles.profileDataView}>
-                  <Text style={styles.profileDataCount}>{profileInfo?.followingCount}</Text>
+                  <Text style={styles.profileDataCount}>{profileInfo?.following.length}</Text>
                   <Text style={styles.profileDataType}>Following</Text>
               </View>
               <View style={styles.profileDataView}>
-                  <Text style={styles.profileDataCount}>{profileInfo?.followerCount}</Text>
+                  <Text style={styles.profileDataCount}>{profileInfo?.followers.length}</Text>
                   <Text style={styles.profileDataType}>Followers</Text>
               </View>
           </View>

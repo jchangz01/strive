@@ -94,7 +94,8 @@ export default function UserRouter()
                         id: req.params.id,
                         displayName: user.displayName,
                         progress: 0,
-                        blurb: ""
+                        blurb: "",
+                        blurbUpdateTime: null
                     }
                 ]
             });
@@ -161,7 +162,8 @@ export default function UserRouter()
                 id: req.params.id,
                 displayName: user.displayName,
                 progress: 0,
-                blurb: ""
+                blurb: "",
+                blurbUpdateTime: null
             });
 
             await userRepo.save(user);

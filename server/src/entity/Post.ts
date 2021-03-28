@@ -27,7 +27,13 @@ export default class Post
     likes!: number;
 
     @Column("json")
-    challengers!: Array<{ id: string, displayName: string, progress: number, blurb: string }>;
+    challengers!: Array<{ 
+        id: string, 
+        displayName: string, 
+        progress: number, 
+        blurb: string,
+        blurbUpdateTime: Date | null
+    }>;
 
     @Column("uuid")
     owner!: string;
