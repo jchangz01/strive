@@ -33,7 +33,7 @@ function Authenticate (props) {
   )
 } 
 
-import Test from './screens/profileDetails'
+import Test from './screens/createPost'
 //Provide bottom bar navigation
 const Tab = createBottomTabNavigator();
 function Secured () {
@@ -44,6 +44,7 @@ function Secured () {
 
   return (
     <Tab.Navigator >
+    <Tab.Screen name="Test" component={Test} />
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Search" component={Search} />
       <Tab.Screen name="Challenges" component={Challenges}/>
@@ -54,7 +55,7 @@ function Secured () {
 
 export default function App () {
 
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(true);
   const [uData, setUData] = React.useState(null);
 
   // check cookie store to see if an auth cookie is present

@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { UserContext } from '../contexts/UserContext';
 
-export default function Header () {
+export default function Header ({createDisabled, refreshDisabled, navigation}) {
 
     const context = React.useContext(UserContext);
 
@@ -19,15 +19,28 @@ export default function Header () {
 
     return (
         <View style={styles.headerContainer}>
-            <Text style={styles.headerContent}>STRIVE</Text>
+            <Text style={styles.headerTitle}>STRIVE</Text>
 
-            <TouchableOpacity style={styles.syncButton} activeOpacity={1} onPress={async () => {
-                await fetchUserData();
-                console.log("updated");
-            }}>
+            <View style={styles.headerButtonsView}>
+                {createDisabled ?
+                    null :
+                    <TouchableOpacity style={styles.headerButton}  onPress={() => {
+                        navigation.navigate('CreatePost')
+                    }}>
+                        <Icon name="plus" size={24} />
+                    </TouchableOpacity> 
+                }
+                {createDisabled ?
+                    null :
+                    <TouchableOpacity style={styles.headerButton} onPress={async () => {
+                        await fetchUserData();
+                        console.log("updated");
+                    }}>
+                        <Icon name="sync" size={24}  />
+                    </TouchableOpacity>
+                }
+            </View>
                 
-                <Icon name="sync" size={32} color="darkgray"></Icon>
-            </TouchableOpacity>
         </View>
     )
 }
@@ -41,16 +54,20 @@ const styles = StyleSheet.create ({
         flex: 1,
         backgroundColor: 'white'
     },
-    headerContent: {
+    headerTitle: {
         position: 'absolute',
         bottom: 8,
         fontSize: 32,
         paddingLeft: 24
     },
-    syncButton: {
+    headerButtonsView: {
         position: 'absolute',
-        bottom: 8,
-        right: 8,
-        paddingRight: 24
+        flexDirection: 'row',
+        bottom: 16,
+        right: 0,
+        paddingRight: 24,
+    },
+    headerButton: {
+        paddingLeft: 24,
     }
 })

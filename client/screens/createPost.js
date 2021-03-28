@@ -1,12 +1,36 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity, Keyboard } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import DatePicker from 'react-native-datepicker'
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function CreatePost (props) {
-    const [title, setTitle] = React.useState('')
-    const [description, setDescription] = React.useState('')
-    const [date, setDate] = React.useState('')
+    const [title, setTitle] = React.useState('');
+    const [description, setDescription] = React.useState('');
+    const [date, setDate] = React.useState(new Date());
+    const [todaysDate, setTodaysDate] = React.useState([])
+
+    //get today's date and time
+    React.useState(() => {
+        //get date
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const yyyy = today.getFullYear();
+
+        //get time
+        const hr = today.getHours(); // => 9
+        const min = today.getMinutes(); // =>  30
+        console.log(new Date(yyyy, mm, dd, hr, min));
+
+        setTodaysDate([yyyy, mm-1, dd, hr, min]);
+    },[])
+
+    const handleDateEndChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setDate(currentDate);
+        console.log(currentDate)
+    };
+
     return (
         <>
             <View style={styles.headerContainer}>
@@ -23,11 +47,26 @@ export default function CreatePost (props) {
                     textAlignVertical='bottom'
                     style={styles.postDesInput}
                 />
-                <Text>Deadline</Text>
-                <DatePicker
-                    date={date}
-                    onDateChange={setDate}
-                />
+                <View style={styles.postStartDateView}>
+                    <Text style={styles.postStartDateTitle}>Start Date: </Text>
+                    <DateTimePicker
+                        value={new Date(todaysDate[0], todaysDate[1], todaysDate[2])}
+                        minimumDate={new Date(todaysDate[0], todaysDate[1], todaysDate[2], todaysDate[3], todaysDate[4])}
+                        maximumDate={new Date(todaysDate[0], todaysDate[1], todaysDate[2], todaysDate[3], todaysDate[4])}
+                        disabled={true}
+                        style={{width: 200, height: 32}}
+                    />
+                </View>
+                <View style={styles.postStartDateView}>
+                    <Text style={styles.postStartDateTitle}>End Date:   </Text>
+                    <DateTimePicker
+                        mode='datetime'
+                        value={date}
+                        onChange={handleDateEndChange}
+                        minimumDate={new Date(todaysDate[0], todaysDate[1], todaysDate[2], todaysDate[3], todaysDate[4])}
+                        style={{width: 400, height: 32}}
+                    />
+                </View>
             </ScrollView>
         </>
     )
@@ -76,5 +115,19 @@ const styles = StyleSheet.create ({
         height: 400,
         borderBottomColor: 'lightgray',
         borderBottomWidth: 1
+    },
+    postStartDateView: {
+        marginTop: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        height: 48,
+        paddingBottom: 16,
+        borderBottomColor: 'lightgray',
+        borderBottomWidth: 1
+    },
+    postStartDateTitle: {
+        fontSize: 16,
+        color: 'lightgray'
     }
 })
