@@ -95,7 +95,7 @@ export default function UserRouter()
                         displayName: user.displayName,
                         progress: 0,
                         blurb: "",
-                        blurbUpdateTime: null
+                        blurbUpdateTime: 0
                     }
                 ]
             });
@@ -163,7 +163,7 @@ export default function UserRouter()
                 displayName: user.displayName,
                 progress: 0,
                 blurb: "",
-                blurbUpdateTime: null
+                blurbUpdateTime: 0
             });
 
             await userRepo.save(user);
@@ -236,6 +236,32 @@ export default function UserRouter()
             await postRepo.save(post);
 
             res.status(200).json({ message: "Unliked post successfully", success: true });
+        }
+        else
+        {
+            res.status(400).json({ message: "No user and/or post with the specified ID", success: false });
+        }
+    });
+
+    // expects { progress: [new progress], blurb: [new blurb] }
+    router.post('/:id/updateProgress/:postID', async (req: Request, res: Response) =>
+    {
+        let user = await userRepo.findOne({ id: req.params.id });
+        let post = await postRepo.findOne({ id: req.params.postID });
+
+        if (user && post)
+        {
+            const idx = post.challengers?.map(e => e.id).indexOf(req.params.id);
+
+            post.challengers[idx].progress = req.body.progress;
+            post.challengers[idx].blurb = req.body.progress;
+            post.challengers[idx].blurbUpdateTime = new Date().getTime();
+
+            await postRepo.save(post);
+
+            // skip sending success message, and send modified post data instead
+            // to avoid second fetch
+            res.status(200).json(post);
         }
         else
         {

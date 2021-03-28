@@ -4,7 +4,7 @@ import {
     Entity,
     Column,
     PrimaryColumn,
-    CreateDateColumn
+    BeforeInsert
 } from 'typeorm';
 import 'reflect-metadata';
 
@@ -20,8 +20,8 @@ export default class Post
     @Column("text")
     description!: string;
 
-    @Column("datetime")
-    finishDate!: Date;
+    @Column("bigint")
+    finishDate!: number;
 
     @Column("int")
     likes!: number;
@@ -32,7 +32,7 @@ export default class Post
         displayName: string, 
         progress: number, 
         blurb: string,
-        blurbUpdateTime: Date | null
+        blurbUpdateTime: number
     }>;
 
     @Column("uuid")
@@ -41,6 +41,12 @@ export default class Post
     @Column("text")
     ownerDisplayName!: string;
 
-    @CreateDateColumn()
-    created!: Date;
+    @Column("bigint")
+    created!: number;
+
+    @BeforeInsert()
+    getCreatedUTC()
+    {
+        this.created = new Date().getTime();
+    }
 }

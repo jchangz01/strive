@@ -1,9 +1,14 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, Button, Keyboard, Alert } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
+import { UserContext } from '../contexts/UserContext';
+
 export default function CreatePost ({navigation}) {
+
+    const context = React.useContext(UserContext);
+
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [date, setDate] = React.useState(new Date());
@@ -26,7 +31,7 @@ export default function CreatePost ({navigation}) {
         setDate(new Date(yyyy, mm, dd+1, hr, min))
     },[])
 
-    const handleDateEndChange = (event, selectedDate) => {
+    const handleDateEndChange = (selectedDate) => {
         const currentDate = selectedDate || date;
         setDate(currentDate);
         console.log(currentDate)
@@ -34,7 +39,46 @@ export default function CreatePost ({navigation}) {
 
     const handlePostCreate = async () =>
     {
-        
+        console.log("creating new post with the following info", {
+            title: title,
+            description: description,
+            dateEnd: date.getTime()
+        });
+
+        await fetch(`http://localhost:3000/user/${context.userData.id}/newPost`,
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                title: title,
+                description: description,
+                finishDate: date.getTime()
+            }),
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(resp => resp.json())
+        .then(resp => 
+        {
+            console.log("createpost attempt response", resp);
+            // update the user context for the new post
+
+            let newUserData = JSON.parse(JSON.stringify(context.userData));
+            newUserData.createdChallenges.push(resp.id);
+            newUserData.joinedChallenges.push(resp.id);
+            context.setUserData(newUserData);
+        });
+
+        // alert the user
+        Alert.alert(
+            "Challenge Created",
+            "The new challenge has been created!",
+            [
+                { 
+                    text: "OK",
+                    onPress: () => { navigation.popToTop(); }
+                }
+            ]
+        )
+
     };
 
     return (
@@ -46,10 +90,10 @@ export default function CreatePost ({navigation}) {
                 </View>
             </View>
             <ScrollView style={styles.container} onScrollBeginDrag={() => Keyboard.dismiss()}>
-                <TextInput placeholder="Title" value={title} onChange={e => setTitle(e)} style={styles.postTitleInput}/>
+                <TextInput placeholder="Title" value={title} onChangeText={setTitle} style={styles.postTitleInput}/>
                 <TextInput
                     multiline={true}
-                    value={description} onChange={e => setDescription(e)}
+                    value={description} onChangeText={setDescription}
                     placeholder='Enter description...'
                     textAlignVertical='bottom'
                     style={styles.postDesInput}
