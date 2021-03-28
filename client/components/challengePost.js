@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import completedBadge from './completedBadge'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { UserContext } from '../contexts/UserContext';
+import CompletedBadge from './completedBadge';
 
 // expecting the following w/in postData:
 // 1) display name of user who created the post
@@ -119,6 +121,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
     return (
         <TouchableOpacity activeOpacity={1} onPress={detailedMode ? null : () => navigation.push('PostDetail', {postId: postData.id}) }>
             <View style={styles.postContainer}>
+                <CompletedBadge />
                 <View style={styles.postProfileView}>
                     <TouchableOpacity 
                         activeOpacity={profileSelectOff ? 1 : null}
