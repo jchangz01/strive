@@ -128,7 +128,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
                     </TouchableOpacity>
                     <View style={styles.postUserView}>
                         <Text style={styles.postUsername}>{postData?.ownerDisplayName}</Text>
-                        <Text style={styles.postTime}>Created on {postData?.created}</Text>
+                        <Text style={styles.postTime}>{new Date(parseInt(postData?.created)).toLocaleString() + " - " + new Date(parseInt(postData?.finishDate)).toLocaleString()}</Text>
                     </View>
                 </View>
                 <View style={styles.postChallengeView} >

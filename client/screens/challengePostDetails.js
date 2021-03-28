@@ -6,35 +6,65 @@ import Message from '../components/progressMessage'
 
 import { UserContext } from '../contexts/UserContext';
 
-/*function PersonalProgress () {
-    return (
-        <>
-            <View style={styles.progressContainer}>
-                <View style={styles.progressBar}>
-                    <Animated.View style={[StyleSheet.absoluteFill], {backgroundColor: "#8BED4F", width: '20%'}}/>
-                </View>
-                <Text style>20%</Text>
-            </View>
-            <Message />
-        </>
-    )
-}*/
-function UpdateProgess () {
+function UpdateProgess ({ postID, setPostData }) {
+
+    const context = React.useContext(UserContext);
+
+    const [progress, setProgress] = React.useState(0);
+    const [blurb, setBlurb] = React.useState('');
+
+    const handleUpdateProgress = async () =>
+    {
+        console.log("things to be sent over",
+        {
+            progress: progress,
+            blurb: blurb 
+        });
+
+        // push to the backend 
+        await fetch(`http://localhost:3000/user/${context.userData.id}/updateProgress/${postID}`,
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                progress: progress,
+                blurb: blurb
+            }),
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(resp => resp.json())
+        .then(resp =>
+            {
+                setPostData(resp);
+            });
+    }
+
     return (
         <>
             <View style={styles.postDetailUpdateContainer}>
                 <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 8}}>
                     <Text style={styles.postDetailUpdateField}>Enter percentage progress: </Text>
                     <View style={[styles.postDetailUpdateInputView, {width: '20%', height: 32}]}>
-                        <TextInput placeholder="1-100" keyboardType = 'numeric' maxLength={3} style={styles.postDetailUpdateInputContent}/>
+                        <TextInput 
+                            placeholder="1-100" 
+                            keyboardType='numeric' 
+                            maxLength={3} 
+                            style={styles.postDetailUpdateInputContent}
+                            value={progress.toString()}
+                            onChangeText={setProgress}
+                            />
                     </View>
                     <Text> %</Text>
                 </View>
                 <Text style={styles.postDetailUpdateField}>Description: </Text>
                 <View style={[styles.postDetailUpdateInputView, {marginTop: 8}]}>
-                    <TextInput multiline={true} style={[styles.postDetailUpdateInputContent, {width: '100%', height: 100}]}/>
+                    <TextInput 
+                        multiline={true} 
+                        style={[styles.postDetailUpdateInputContent, {width: '100%', height: 100}]}
+                        value={blurb}
+                        onChangeText={setBlurb}
+                    />
                 </View>
-                <TouchableOpacity style={styles.postDetailUpdateButton}>
+                <TouchableOpacity style={styles.postDetailUpdateButton} onPress={handleUpdateProgress}>
                     <Text style={styles.postDetailUpdateButtonText}>Submit</Text>
                 </TouchableOpacity>
             </View>
@@ -65,8 +95,6 @@ export default function ChallengePostDetails({ route, navigation }) {
 
     const [participant, setParticipant] = React.useState(false)
     const [postData, setPostData] = React.useState({ id: route.params.postId });
-    const [updatePercentage, setupdatePercentage] = React.useState('');
-    const [updateDes, setupdateDes] = React.useState('');
 
     React.useEffect(() => {
         //search user's joined challenges to verify if they have joined the challenge
@@ -93,12 +121,12 @@ export default function ChallengePostDetails({ route, navigation }) {
         getPostData();
     }, [context.userData]);
 
-    const PersonalProgess = postData.challengers?.filter((entry => entry.id === context.userData.id ))
+    const PersonalProgess = postData.challengers?.filter(entry => entry.id === context.userData.id )
     const PersonalProgessComponent = PersonalProgess?.map((entry, index) => {
         return <UsersProgess data={entry} personal={true} key={index}/>
     })
 
-    const PersonalMessage = postData.challengers?.filter((entry, index) => (entry.id === context.userData.id && entry.updateTime != null))
+    const PersonalMessage = postData.challengers?.filter((entry, index) => (entry.id === context.userData.id && entry.blurbUpdateTime))
     const PersonalMessageComponent = PersonalMessage?.map((entry, index) => {
         return <Message data={entry} personal={true} key={index}/>
     })
@@ -107,7 +135,7 @@ export default function ChallengePostDetails({ route, navigation }) {
         return <UsersProgess data={entry} key={index}/>
     })
 
-    const MessageList = postData.challengers?.filter((entry, index) => (entry.id != context.userData.id && entry.updateTime != null))
+    const MessageList = postData.challengers?.filter((entry, index) => (entry.id != context.userData.id && entry.blurbUpdateTime))
     const MessageListComponent = MessageList?.map((entry, index) => {
         return <Message data={entry} key={index}/>
     })
@@ -128,7 +156,10 @@ export default function ChallengePostDetails({ route, navigation }) {
                             </View>
                             <View style={styles.postDetailSectionContainer}>
                                 <Text style={styles.postDetailSectionTitle}>Update Progress</Text>
-                                <UpdateProgess />
+                                <UpdateProgess 
+                                    postID={postData.id}
+                                    setPostData={setPostData}   // used to trigger rerender 
+                                />
                             </View> 
                         </>: null
                     }

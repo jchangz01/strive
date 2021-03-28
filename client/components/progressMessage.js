@@ -3,14 +3,14 @@ import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 
 
 export default function progressMessage ({ data, personal }) {
-    const [time, setTime] = React.useEffect('')
+    const [time, setTime] = React.useState('')
     React.useEffect(() => {
         setTime(new Date(parseInt(data.blurbUpdateTime)).toLocaleString());
     },[])
 
     return (
         <View style={styles.messageContainer}>
-            {personal ? null : <Text style={styles.messageUser}>Justin Chang</Text>}
+            {personal ? null : <Text style={styles.messageUser}>{data?.displayName}</Text>}
             <Text style={styles.messageTitle}>{time}</Text>
             <Text style={styles.messageDescription}>{data?.blurb}</Text>
         </View>
