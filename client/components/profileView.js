@@ -1,43 +1,63 @@
 import * as React from 'react';
+import { Touchable } from 'react-native';
 import { StyleSheet, Text, View, ScrollView, Button, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Post from '../components/challengePost'
 
 
-export default function ProfileView ({profileInfo, createdPosts, navigation}) {
-    const postList = createdPosts?.map(post =>
-    {
-        return <Post key={post.id} postData={post} profileSelectOff={true} navigation={navigation}/>
-    });
+export default function ProfileView ({personalProfile, profileInfo, createdPosts, navigation}) {
+  const [following, setFollowing] = React.useState(false);
 
-    return (
-        <ScrollView style={styles.container} stickyHeaderIndices={[1]}>
-            <View style={styles.profileView} >
-            <Icon name="user-circle" size={96} color='lightgray'/>
-                <View style={styles.profileUserView}>
-                    <Text style={styles.profileUsername}>{profileInfo?.username}</Text>
-                    <Text style={styles.profileUserEmail}>{profileInfo?.userEmail}</Text>
-                </View>
-            </View>
-            <View>
-            <View style={styles.profileDataContainer}>
-                <View style={styles.profileDataView}>
-                    <Text style={styles.profileDataCount}>{profileInfo?.completedChallengeCount}</Text>
-                    <Text style={styles.profileDataType}>Completed</Text>
-                </View>
-                <View style={styles.profileDataView}>
-                    <Text style={styles.profileDataCount}>{profileInfo?.followingCount}</Text>
-                    <Text style={styles.profileDataType}>Following</Text>
-                </View>
-                <View style={styles.profileDataView}>
-                    <Text style={styles.profileDataCount}>{profileInfo?.followerCount}</Text>
-                    <Text style={styles.profileDataType}>Followers</Text>
-                </View>
-            </View>
-            </View>  
-            {postList}
-        </ScrollView>
-    );
+  const handleFollow = () => {
+    setFollowing(!following);
+
+    //enter fetch call here
+  }
+
+  const postList = createdPosts?.map(post =>
+  {
+      return <Post key={post.id} postData={post} profileSelectOff={true} navigation={navigation}/>
+  });
+
+  return (
+      <ScrollView style={styles.container} stickyHeaderIndices={[1]}>
+          <View style={styles.profileView} >
+          <Icon name="user-circle" size={96} color='lightgray'/>
+              <View style={styles.profileUserView}>
+                  <Text style={styles.profileUsername}>{profileInfo?.username}</Text>
+                  <Text style={styles.profileUserEmail}>{profileInfo?.userEmail}</Text>
+                  {
+                    personalProfile ? null :
+                    ( following ?
+                      <TouchableOpacity onPress={handleFollow} style={styles.profileFollowingBtn} >
+                        <Text>Following </Text>
+                        <Icon name="check"/>
+                      </TouchableOpacity> :
+                      <TouchableOpacity onPress={handleFollow} style={styles.profileFollowBtn}>
+                        <Text style={{color: 'white'}}>Follow</Text>
+                      </TouchableOpacity>)
+                  }
+              </View>
+          </View>
+          <View>
+          <View style={styles.profileDataContainer}>
+              <View style={styles.profileDataView}>
+                  <Text style={styles.profileDataCount}>{profileInfo?.completedChallengeCount}</Text>
+                  <Text style={styles.profileDataType}>Completed</Text>
+              </View>
+              <View style={styles.profileDataView}>
+                  <Text style={styles.profileDataCount}>{profileInfo?.followingCount}</Text>
+                  <Text style={styles.profileDataType}>Following</Text>
+              </View>
+              <View style={styles.profileDataView}>
+                  <Text style={styles.profileDataCount}>{profileInfo?.followerCount}</Text>
+                  <Text style={styles.profileDataType}>Followers</Text>
+              </View>
+          </View>
+          </View>  
+          {postList}
+      </ScrollView>
+  );
 }
 const styles = StyleSheet.create({
     container: {
@@ -63,6 +83,28 @@ const styles = StyleSheet.create({
     profileUserEmail:{
       fontSize: 16,
       color: 'gray'
+    },
+    profileFollowBtn: {
+      width: 140,
+      borderRadius: 4,
+      height: 32,
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: 'row',
+      marginTop: 16,
+      backgroundColor: '#458eff',
+    },
+    profileFollowingBtn: {
+      width: 140,
+      borderRadius: 4,
+      height: 32,
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: 'row',
+      marginTop: 16,
+      backgroundColor: 'white',
+      borderColor: 'lightgray',
+      borderWidth: 2
     },
     profileDataContainer: {
       display: 'flex',

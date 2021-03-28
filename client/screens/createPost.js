@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button, TouchableOpacity, Keyboard } from 'reac
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function CreatePost (props) {
+export default function CreatePost ({navigation}) {
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [date, setDate] = React.useState(new Date());
@@ -13,16 +13,17 @@ export default function CreatePost (props) {
     React.useState(() => {
         //get date
         const today = new Date();
-        const dd = String(today.getDate()).padStart(2, '0');
-        const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const dd = today.getDate()
+        const mm = today.getMonth() //January is 0!
         const yyyy = today.getFullYear();
 
         //get time
         const hr = today.getHours(); // => 9
         const min = today.getMinutes(); // =>  30
-        console.log(new Date(yyyy, mm, dd, hr, min));
+        console.log("Curent Date: " + new Date(yyyy, mm, dd, hr, min));
 
-        setTodaysDate([yyyy, mm-1, dd, hr, min]);
+        setTodaysDate([yyyy, mm, dd, hr, min]);
+        setDate(new Date(yyyy, mm, dd+1, hr, min))
     },[])
 
     const handleDateEndChange = (event, selectedDate) => {
@@ -35,14 +36,15 @@ export default function CreatePost (props) {
         <>
             <View style={styles.headerContainer}>
                 <View style={styles.headerView}>
-                    <Button title='Close'/>
+                    <Button title='Close' onPress={() => navigation.goBack()}/>
                     <Button title='Create'/>
                 </View>
             </View>
             <ScrollView style={styles.container} onScrollBeginDrag={() => Keyboard.dismiss()}>
-                <TextInput placeholder="Title" style={styles.postTitleInput}/>
+                <TextInput placeholder="Title" value={title} onChange={e => setTitle(e)} style={styles.postTitleInput}/>
                 <TextInput
                     multiline={true}
+                    value={description} onChange={e => setDescription(e)}
                     placeholder='Enter description...'
                     textAlignVertical='bottom'
                     style={styles.postDesInput}

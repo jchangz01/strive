@@ -3,6 +3,7 @@ import { StyleSheet, ScrollView } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import PostDetailScreen from '../screens/challengePostDetails'
 import ProfileDetailScreen from '../screens/profileDetails'
+import CreatePost from '../screens/createPost'
 import Header from '../components/header'
 import Post from '../components/challengePost'
 
@@ -18,7 +19,7 @@ function HomeScreen ({ route, navigation }) {
     console.log("refetching feed");
 
     async function retrieveData() { 
-      await fetch(`http://localhost:3000/feed/loadFeed/${context.userData.id}`)
+      await fetch(`http://10.0.0.153:3000/feed/loadFeed/${context.userData.id}`)
       .then(resp => resp.json())
       .then(resp =>
       {
@@ -43,7 +44,7 @@ function HomeScreen ({ route, navigation }) {
   
   return (
     <>
-    <Header/>
+    <Header navigation={navigation}/>
     <ScrollView style={styles.container}>
       {Posts}
     </ScrollView>
@@ -61,6 +62,7 @@ export default function Home () {
       <HomeStack.Screen name="Home" component={HomeScreen} />
       <HomeStack.Screen name="PostDetail" component={PostDetailScreen} />
       <HomeStack.Screen name="ProfileDetail" component={ProfileDetailScreen} />
+      <HomeStack.Screen name="CreatePost" component={CreatePost} />
     </HomeStack.Navigator>
   )
 } 

@@ -12,7 +12,7 @@ export default function Header ({createDisabled, refreshDisabled, navigation}) {
     {
         console.log(`top level user data fetch w/ ID ${context.userData.id}`)
 
-        await fetch(`http://localhost:3000/user/${context.userData.id}`)
+        await fetch(`http://10.0.0.153:3000/user/${context.userData.id}`)
         .then(resp => resp.json())
         .then(resp => context.setUserData(resp));
     }
@@ -30,7 +30,7 @@ export default function Header ({createDisabled, refreshDisabled, navigation}) {
                         <Icon name="plus" size={24} />
                     </TouchableOpacity> 
                 }
-                {createDisabled ?
+                {refreshDisabled ?
                     null :
                     <TouchableOpacity style={styles.headerButton} onPress={async () => {
                         await fetchUserData();

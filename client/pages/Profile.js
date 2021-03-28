@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import PostDetailScreen from '../screens/challengePostDetails'
 import ProfileDetailScreen from '../screens/profileDetails'
+import CreatePost from '../screens/createPost'
 import Header from '../components/header'
 import ProfileTemplate from '../components/profileView'
 import { UserContext } from '../contexts/UserContext';
@@ -30,7 +31,7 @@ function ProfileScreen({ navigation }) {
     // second request to get all the posts 
     const getPostsProfile = async () =>
     {
-      await fetch(`http://localhost:3000/post/get`, {
+      await fetch(`http://10.0.0.153:3000/post/get`, {
         method: 'POST',
         body: JSON.stringify({ posts: context.userData.createdChallenges }),
         headers: { 'Content-Type': 'application/json' }
@@ -45,7 +46,7 @@ function ProfileScreen({ navigation }) {
   return (
     <>
         <Header/>
-        <ProfileTemplate profileInfo={profileInfo} createdPosts={createdPosts} navigation={navigation}/>                    
+        <ProfileTemplate personalProfile={true} profileInfo={profileInfo} createdPosts={createdPosts} navigation={navigation}/>                    
     </>
   );
 }
@@ -60,6 +61,7 @@ export default function Profile () {
       <ProfileStack.Screen name="Profile"component={ProfileScreen} />
       <ProfileStack.Screen name="PostDetail" component={PostDetailScreen} />
       <ProfileStack.Screen name="ProfileDetail" component={ProfileDetailScreen} />
+      <ProfileStack.Screen name="CreatePost" component={CreatePost} />
     </ProfileStack.Navigator>
   )
 } 
