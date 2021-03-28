@@ -31,7 +31,7 @@ function ProfileScreen({ navigation }) {
     // second request to get all the posts 
     const getPostsProfile = async () =>
     {
-      await fetch(`http://localhost:3000/post/get`, {
+      await fetch(`http://10.0.0.153:3000/post/get`, {
         method: 'POST',
         body: JSON.stringify({ posts: context.userData.createdChallenges }),
         headers: { 'Content-Type': 'application/json' }

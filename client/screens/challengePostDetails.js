@@ -42,15 +42,15 @@ function UpdateProgess () {
     )
 }
 
-function UsersProgess () {
+function UsersProgess ({ data, personal }) {
     return (        
         <>
-            <Text style={styles.progressUser}>Justin Chang</Text>
+            {personal ? null : <Text style={styles.progressUser}>{data.displayName}</Text>}
             <View style={styles.progressContainer}>
                 <View style={styles.progressBar}>
-                    <Animated.View style={[StyleSheet.absoluteFill], {backgroundColor: "#8BED4F", width: '50%'}}/>
+                    <Animated.View style={[StyleSheet.absoluteFill], {backgroundColor: "#8BED4F", width: data.progress + '%'}}/>
                 </View>
-                <Text style>100%</Text>
+                <Text style>{data.progress}%</Text>
             </View>
         </>
     )
@@ -62,14 +62,23 @@ export default function ChallengePostDetails({ route, navigation }) {
     console.log("loading post details for post", route.params.postId);
 
     const context = React.useContext(UserContext);
+    const [participant, setParticipant] = React.useState(false)
     const [postData, setPostData] = React.useState({ id: route.params.postId });
     const [updatePercentage, setupdatePercentage] = React.useState('');
     const [updateDes, setupdateDes] = React.useState('');
 
     React.useEffect(() => {
+        //search user's joined challenges to verify if they have joined the challenge
+        if (context.userData.joinedChallenges.findIndex(e => e === route.params.postId) > -1)
+            setParticipant(true);
+        else
+            setParticipant(false);
+    }, [context.userData]);
+
+    React.useEffect(() => {
         const getPostData = async () => {
 
-            await fetch('http://localhost:3000/post/get', {
+            await fetch('http://10.0.0.153:3000/post/get', {
                 method: 'POST',
                 body: JSON.stringify({ posts: [route.params.postId] }),
                 headers: { 'Content-Type': 'application/json' }
@@ -83,29 +92,42 @@ export default function ChallengePostDetails({ route, navigation }) {
         getPostData();
     }, [context.userData]);
 
+    const LeaderboardList = postData.challengers?.map((entry, index) => {
+        return <UsersProgess data={entry} key={index}/>
+    });
+
+    const MessageList = postData.challengers?.map((entry, index) => {
+        return <Message data={entry} key={index}/>
+    })
+
     return (
     <>
         <Header createDisabled={true} />
         <View style={styles.container}>
             <ScrollView >    
-            <Post postData={postData} detailedMode={true} navigation={navigation}>
-                <View style={styles.postDetailSectionContainer}>
-                    <Text style={styles.postDetailSectionTitle}>Your Progress</Text>
-                    <PersonalProgress percentage={updatePercentage} changePercentage={e=>setupdatePercentage(e)} description={updateDes} setupdateDes={e=>setupdateDes(e)} />
-                </View>
-                <View style={styles.postDetailSectionContainer}>
-                    <Text style={styles.postDetailSectionTitle}>Update Progress</Text>
-                    <UpdateProgess />
-                </View>
-                <View style={styles.postDetailSectionContainer}>
-                    <Text style={styles.postDetailSectionTitle}>Leaderboard</Text>
-                    <UsersProgess/>
-                    <UsersProgess/>
-                    <UsersProgess/>
-                    <UsersProgess/>
-                    <UsersProgess/>
-                </View>
-            </Post>
+                <Post postData={postData} detailedMode={true} navigation={navigation}>
+                    {   
+                        participant ? 
+                        <>
+                            <View style={styles.postDetailSectionContainer}>
+                                <Text style={styles.postDetailSectionTitle}>Your Progress</Text>
+                                <PersonalProgress percentage={updatePercentage} changePercentage={e=>setupdatePercentage(e)} description={updateDes} setupdateDes={e=>setupdateDes(e)} />
+                            </View>
+                            <View style={styles.postDetailSectionContainer}>
+                                <Text style={styles.postDetailSectionTitle}>Update Progress</Text>
+                                <UpdateProgess />
+                            </View> 
+                        </>: null
+                    }
+                    <View style={styles.postDetailSectionContainer}>
+                        <Text style={styles.postDetailSectionTitle}>Leaderboard</Text>
+                        {LeaderboardList}
+                    </View>
+                    <View style={styles.postDetailSectionContainer}>
+                        <Text style={styles.postDetailSectionTitle}>How others are doing</Text>
+                        {MessageList}
+                    </View>
+                </Post>
             </ScrollView>
         </View>
     </>

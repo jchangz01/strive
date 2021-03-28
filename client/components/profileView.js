@@ -25,7 +25,7 @@ export default function ProfileView ({ personalProfile, profileInfo, createdPost
     //update backend and frontend user obj
     if (following)
     {
-        await fetch(`http://localhost:3000/user/${context.userData.id}/unfollow/${profileInfo.id}`, 
+        await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/unfollow/${profileInfo.id}`, 
         {
           method: 'delete'
         })
@@ -41,7 +41,7 @@ export default function ProfileView ({ personalProfile, profileInfo, createdPost
     }
     else
     {
-        await fetch(`http://localhost:3000/user/${context.userData.id}/follow/${profileInfo.id}`)
+        await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/follow/${profileInfo.id}`)
         .then(resp => resp.json())
         .then(resp => console.log("resp after join attempt", resp));
 
@@ -83,15 +83,15 @@ export default function ProfileView ({ personalProfile, profileInfo, createdPost
           <View>
           <View style={styles.profileDataContainer}>
               <View style={styles.profileDataView}>
-                  <Text style={styles.profileDataCount}>{profileInfo?.completedChallenges.length}</Text>
+                  <Text style={styles.profileDataCount}>{profileInfo?.completedChallenges?.length}</Text>
                   <Text style={styles.profileDataType}>Completed</Text>
               </View>
               <View style={styles.profileDataView}>
-                  <Text style={styles.profileDataCount}>{profileInfo?.following.length}</Text>
+                  <Text style={styles.profileDataCount}>{profileInfo?.following?.length}</Text>
                   <Text style={styles.profileDataType}>Following</Text>
               </View>
               <View style={styles.profileDataView}>
-                  <Text style={styles.profileDataCount}>{profileInfo?.followers.length}</Text>
+                  <Text style={styles.profileDataCount}>{profileInfo?.followers?.length}</Text>
                   <Text style={styles.profileDataType}>Followers</Text>
               </View>
           </View>

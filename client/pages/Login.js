@@ -14,7 +14,7 @@ export default function Login({ route, navigation }) {
   const handleLogin = async () => {
 
   // send post request - URL is for dev env only
-  await fetch('http://localhost:3000/auth/login', {
+  await fetch('http://10.0.0.153:3000/auth/login', {
     method: 'POST',
     body: JSON.stringify({
       email: email,

@@ -21,7 +21,7 @@ function currentChallengesScreen({ navigation }) {
     {
       console.log(`getting joined challenges for user with id ${context.userData.id}`)
 
-      await fetch('http://localhost:3000/post/get', {
+      await fetch('http://10.0.0.153:3000/post/get', {
         method: 'POST',
         body: JSON.stringify({ posts: context.userData.joinedChallenges }),
         headers: { 'Content-Type': 'application/json' }
