@@ -56,7 +56,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         // update backend and frontend user obj
         if (joined)
         {
-            await fetch(`http://localhost:3000/user/${context.userData.id}/leave/${postData.id}`)
+            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/leave/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after leave attempt", resp));
 
@@ -69,7 +69,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         }
         else
         {
-            await fetch(`http://localhost:3000/user/${context.userData.id}/join/${postData.id}`)
+            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/join/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after join attempt", resp));
 
@@ -90,7 +90,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         // update backend and frontend user obj
         if (liked)
         {
-            await fetch(`http://localhost:3000/user/${context.userData.id}/unlike/${postData.id}`)
+            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/unlike/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after leave attempt", resp));
 
@@ -103,7 +103,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         }
         else
         {
-            await fetch(`http://localhost:3000/user/${context.userData.id}/like/${postData.id}`)
+            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/like/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after join attempt", resp));
 
@@ -117,12 +117,12 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
     }
 
     return (
-        <TouchableOpacity activeOpacity={1} onPress={detailedMode ? null : () => navigation.navigate('PostDetail', {postId: postData.id}) }>
+        <TouchableOpacity activeOpacity={1} onPress={detailedMode ? null : () => navigation.push('PostDetail', {postId: postData.id}) }>
             <View style={styles.postContainer}>
                 <View style={styles.postProfileView}>
                     <TouchableOpacity 
                         activeOpacity={profileSelectOff ? 1 : null}
-                        onPress={profileSelectOff ? null : () => navigation.navigate('ProfileDetail', {profileId: postData.owner})}
+                        onPress={profileSelectOff ? null : () => navigation.push('ProfileDetail', {profileId: postData.owner})}
                     >
                         <Icon name="user-circle" size={48} color='lightgray'/>
                     </TouchableOpacity>

@@ -26,7 +26,7 @@ export default function Login({ navigation }) {
     else
     {
       // send post request - URL is for dev env only
-      await fetch('http://localhost:3000/auth/signup', {
+      await fetch('http://10.0.0.153:3000/auth/signup', {
         method: 'POST',
         body: JSON.stringify({
           email: email,
@@ -46,7 +46,7 @@ export default function Login({ navigation }) {
           [
             { 
               text: "OK",
-              onPress: () => { if (resp.success) navigation.navigate('Login'); }
+              onPress: () => { if (resp.success) navigation.push('Login'); }
             } /* OK button */
           ]
         );
@@ -70,7 +70,7 @@ export default function Login({ navigation }) {
             submit={handleSignup}/>
         <View style={styles.newUserView}>
           <Text>Already a user?</Text>
-          <Text style={styles.newUser} onPress={() => navigation.navigate('Login')}> Log in!</Text>
+          <Text style={styles.newUser} onPress={() => navigation.push('Login')}> Log in!</Text>
         </View>
     </View>
   );

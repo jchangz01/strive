@@ -14,7 +14,7 @@ export default function Login({ route, navigation }) {
   const handleLogin = async () => {
 
   // send post request - URL is for dev env only
-  await fetch('http://localhost:3000/auth/login', {
+  await fetch('http://10.0.0.153:3000/auth/login', {
     method: 'POST',
     body: JSON.stringify({
       email: email,
@@ -55,7 +55,7 @@ export default function Login({ route, navigation }) {
         <Prompt type="Log in" email={email} emailChange={(e) => setEmail(e)} pw={password} pwChange={(e) => setPassword(e)} submit={handleLogin}/>
         <View style={styles.newUserView}>
           <Text>Not a user?</Text>
-          <Text style={styles.newUser} onPress={() => navigation.navigate('Signup')}> Create an account!</Text>
+          <Text style={styles.newUser} onPress={() => navigation.push('Signup')}> Create an account!</Text>
         </View>
     </View>
   );

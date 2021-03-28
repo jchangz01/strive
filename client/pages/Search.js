@@ -18,7 +18,7 @@ function SearchScreen({ navigation }) {
 
     if (e)
     {
-      await fetch('http://localhost:3000/post/search', {
+      await fetch('http://10.0.0.153:3000/post/search', {
         method: 'POST',
         body: JSON.stringify({
           query: e

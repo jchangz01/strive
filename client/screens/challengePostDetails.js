@@ -22,7 +22,7 @@ function UpdateProgess ({ postID, setPostData }) {
         });
 
         // push to the backend 
-        await fetch(`http://localhost:3000/user/${context.userData.id}/updateProgress/${postID}`,
+        await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/updateProgress/${postID}`,
         {
             method: 'POST',
             body: JSON.stringify({
@@ -72,10 +72,13 @@ function UpdateProgess ({ postID, setPostData }) {
     )
 }
 
-function UsersProgess ({ data, personal }) {
+function UsersProgess ({ data, personal, navigation }) {
     return (        
         <>
-            {personal ? null : <Text style={styles.progressUser}>{data.displayName}</Text>}
+            {personal ? null : 
+            <TouchableOpacity activeOpacity={1} onPress={() => navigation.push('ProfileDetail', {profileId: data.id})}>
+                <Text style={styles.progressUser}>{data.displayName}</Text>
+            </TouchableOpacity>}
             <View style={styles.progressContainer}>
                 <View style={styles.progressBar}>
                     <Animated.View style={[StyleSheet.absoluteFill], {backgroundColor: "#8BED4F", width: data.progress + '%'}}/>
@@ -107,7 +110,7 @@ export default function ChallengePostDetails({ route, navigation }) {
     React.useEffect(() => {
         const getPostData = async () => {
 
-            await fetch('http://localhost:3000/post/get', {
+            await fetch('http://10.0.0.153:3000/post/get', {
                 method: 'POST',
                 body: JSON.stringify({ posts: [route.params.postId] }),
                 headers: { 'Content-Type': 'application/json' }
@@ -132,12 +135,12 @@ export default function ChallengePostDetails({ route, navigation }) {
     })
 
     const LeaderboardListComponent = postData.challengers?.map((entry, index) => {
-        return <UsersProgess data={entry} key={index}/>
+        return <UsersProgess data={entry} key={index} navigation={navigation}/>
     })
 
     const MessageList = postData.challengers?.filter((entry, index) => (entry.id != context.userData.id && entry.blurbUpdateTime))
     const MessageListComponent = MessageList?.map((entry, index) => {
-        return <Message data={entry} key={index}/>
+        return <Message data={entry} key={index} navigation={navigation}/>
     })
 
     return (

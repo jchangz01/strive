@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 
 
-export default function progressMessage ({ data, personal }) {
+export default function progressMessage ({ data, personal, navigation }) {
     const [time, setTime] = React.useState('')
     React.useEffect(() => {
         setTime(new Date(parseInt(data.blurbUpdateTime)).toLocaleString());
@@ -10,7 +10,7 @@ export default function progressMessage ({ data, personal }) {
 
     return (
         <View style={styles.messageContainer}>
-            {personal ? null : <Text style={styles.messageUser}>{data?.displayName}</Text>}
+            {personal ? null : <TouchableOpacity activeOpacity={1} onPress={() => navigation.push('ProfileDetail', {profileId: data.id})}><Text style={styles.messageUser}>{data?.displayName}</Text></TouchableOpacity>}
             <Text style={styles.messageTitle}>{time}</Text>
             <Text style={styles.messageDescription}>{data?.blurb}</Text>
         </View>
