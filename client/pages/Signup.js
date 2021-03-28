@@ -26,7 +26,7 @@ export default function Login({ navigation }) {
     else
     {
       // send post request - URL is for dev env only
-      await fetch('http://localhost:3000/auth/signup', {
+      await fetch('http://10.0.0.153:3000/auth/signup', {
         method: 'POST',
         body: JSON.stringify({
           email: email,

@@ -11,6 +11,14 @@ export default function ProfileView ({ personalProfile, profileInfo, setProfileI
   const context = React.useContext(UserContext);
 
   const [following, setFollowing] = React.useState(false);
+  const [personal, setPersonal] = React.useState(false)
+
+  React.useEffect(() => {
+    if (personalProfile) 
+      setPersonal(personalProfile);
+    else if (context.userData.id === profileInfo.id)
+      setPersonal(true);
+  },[])
 
   React.useEffect(() =>
   {
@@ -25,7 +33,7 @@ export default function ProfileView ({ personalProfile, profileInfo, setProfileI
     //update backend and frontend user obj
     if (following)
     {
-        await fetch(`http://localhost:3000/user/${context.userData.id}/unfollow/${profileInfo.id}`, 
+        await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/unfollow/${profileInfo.id}`, 
         {
           method: 'delete'
         })
@@ -46,7 +54,7 @@ export default function ProfileView ({ personalProfile, profileInfo, setProfileI
     }
     else
     {
-        await fetch(`http://localhost:3000/user/${context.userData.id}/follow/${profileInfo.id}`)
+        await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/follow/${profileInfo.id}`)
         .then(resp => resp.json())
         .then(resp => console.log("resp after join attempt", resp));
 

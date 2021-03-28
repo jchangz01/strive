@@ -6,7 +6,7 @@ import Message from '../components/progressMessage'
 
 import { UserContext } from '../contexts/UserContext';
 
-function PersonalProgress () {
+/*function PersonalProgress () {
     return (
         <>
             <View style={styles.progressContainer}>
@@ -18,7 +18,7 @@ function PersonalProgress () {
             <Message />
         </>
     )
-}
+}*/
 function UpdateProgess () {
     return (
         <>
@@ -62,6 +62,7 @@ export default function ChallengePostDetails({ route, navigation }) {
     console.log("loading post details for post", route.params.postId);
 
     const context = React.useContext(UserContext);
+
     const [participant, setParticipant] = React.useState(false)
     const [postData, setPostData] = React.useState({ id: route.params.postId });
     const [updatePercentage, setupdatePercentage] = React.useState('');
@@ -78,7 +79,7 @@ export default function ChallengePostDetails({ route, navigation }) {
     React.useEffect(() => {
         const getPostData = async () => {
 
-            await fetch('http://localhost:3000/post/get', {
+            await fetch('http://10.0.0.153:3000/post/get', {
                 method: 'POST',
                 body: JSON.stringify({ posts: [route.params.postId] }),
                 headers: { 'Content-Type': 'application/json' }
@@ -92,11 +93,22 @@ export default function ChallengePostDetails({ route, navigation }) {
         getPostData();
     }, [context.userData]);
 
-    const LeaderboardList = postData.challengers?.map((entry, index) => {
-        return <UsersProgess data={entry} key={index}/>
-    });
+    const PersonalProgess = postData.challengers?.filter((entry => entry.id === context.userData.id ))
+    const PersonalProgessComponent = PersonalProgess?.map((entry, index) => {
+        return <UsersProgess data={entry} personal={true} key={index}/>
+    })
 
-    const MessageList = postData.challengers?.map((entry, index) => {
+    const PersonalMessage = postData.challengers?.filter((entry, index) => (entry.id === context.userData.id && entry.updateTime != null))
+    const PersonalMessageComponent = PersonalMessage?.map((entry, index) => {
+        return <Message data={entry} personal={true} key={index}/>
+    })
+
+    const LeaderboardListComponent = postData.challengers?.map((entry, index) => {
+        return <UsersProgess data={entry} key={index}/>
+    })
+
+    const MessageList = postData.challengers?.filter((entry, index) => (entry.id != context.userData.id && entry.updateTime != null))
+    const MessageListComponent = MessageList?.map((entry, index) => {
         return <Message data={entry} key={index}/>
     })
 
@@ -111,7 +123,8 @@ export default function ChallengePostDetails({ route, navigation }) {
                         <>
                             <View style={styles.postDetailSectionContainer}>
                                 <Text style={styles.postDetailSectionTitle}>Your Progress</Text>
-                                <PersonalProgress percentage={updatePercentage} changePercentage={e=>setupdatePercentage(e)} description={updateDes} setupdateDes={e=>setupdateDes(e)} />
+                                {PersonalProgessComponent}
+                                {PersonalMessageComponent}
                             </View>
                             <View style={styles.postDetailSectionContainer}>
                                 <Text style={styles.postDetailSectionTitle}>Update Progress</Text>
@@ -121,11 +134,11 @@ export default function ChallengePostDetails({ route, navigation }) {
                     }
                     <View style={styles.postDetailSectionContainer}>
                         <Text style={styles.postDetailSectionTitle}>Leaderboard</Text>
-                        {LeaderboardList}
+                        {LeaderboardListComponent}
                     </View>
                     <View style={styles.postDetailSectionContainer}>
                         <Text style={styles.postDetailSectionTitle}>How others are doing</Text>
-                        {MessageList}
+                        {MessageListComponent}
                     </View>
                 </Post>
             </ScrollView>
@@ -181,14 +194,14 @@ postDetailUpdateButton: {
 postDetailUpdateButtonText: {
     
 },
-  progressContainer: {
+progressContainer: {
     flexDirection: 'row',
     height: 32,  
-  },
-  progressUser: {
+},
+progressUser: {
     fontSize: 14
-  },
-  progressBar: {
+},
+progressBar: {
     flexDirection: 'row',
     height: 16,
     width: '92%',
@@ -197,5 +210,5 @@ postDetailUpdateButtonText: {
     borderColor: '#000',
     borderWidth: 2,
     borderRadius: 5
-  },
+},
 })
