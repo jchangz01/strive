@@ -20,23 +20,20 @@ export default class Post
     @Column("text")
     description!: string;
 
-    @Column("text")         // update this definition when we need it
-    duration!: string;
+    @Column("datetime")
+    finishDate!: Date;
 
     @Column("int")
     likes!: number;
 
-    @Column("simple-array")
-    challengers!: string[];
+    @Column("json")
+    challengers!: Array<{ id: string, progress: number, blurb: string }>;
 
     @Column("uuid")
     owner!: string;
 
     @Column("text")
     ownerDisplayName!: string;
-
-    @Column("simple-array")
-    comments!: string;
 
     @CreateDateColumn()
     created!: Date;

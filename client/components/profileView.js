@@ -4,14 +4,50 @@ import { StyleSheet, Text, View, ScrollView, Button, TouchableOpacity } from 're
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Post from '../components/challengePost'
 
+import { UserContext } from '../contexts/UserContext';
 
-export default function ProfileView ({personalProfile, profileInfo, createdPosts, navigation}) {
-  const [following, setFollowing] = React.useState(false);
+export default function ProfileView ({ personalProfile, profileInfo, createdPosts, navigation}) {  
+  
+  const context = React.useContext(UserContext);
+  
+  console.log("profileid", profileInfo.id);
+  console.log("following:", context.userData.following.includes(profileInfo.id));
+
+  const [following, setFollowing] = React.useState(context.userData.following.includes(profileInfo.id));
 
   const handleFollow = () => {
     setFollowing(!following);
 
-    //enter fetch call here
+    console.log("personalprofile", profileInfo);
+
+    // update backend and frontend user obj
+    // if (following)
+    // {
+    //     await fetch(`http://localhost:3000/user/${context.userData.id}/unfollow/${postData.id}`)
+    //     .then(resp => resp.json())
+    //     .then(resp => console.log("resp after unfollow attempt", resp));
+
+    //     // make deep copy of user data, modify, then update state for the changes to propagate correctly
+    //     let newUserData = JSON.parse(JSON.stringify(context.userData));
+    //     newUserData.joinedChallenges.splice(newUserData.joinedChallenges.indexOf(postData.id), 1);
+    //     context.setUserData(newUserData);
+
+    //     console.log("left attempt done");
+    // }
+    // else
+    // {
+    //     await fetch(`http://localhost:3000/user/${context.userData.id}/follow/${postData.id}`)
+    //     .then(resp => resp.json())
+    //     .then(resp => console.log("resp after join attempt", resp));
+
+    //     // make deep copy of user data, modify, then update state for the changes to propagate correctly
+    //     let newUserData = JSON.parse(JSON.stringify(context.userData));
+    //     newUserData.joinedChallenges.push(postData.id);
+    //     context.setUserData(newUserData);
+
+    //     console.log("join attempt done");
+    // }
+
   }
 
   const postList = createdPosts?.map(post =>

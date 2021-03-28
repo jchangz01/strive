@@ -19,7 +19,7 @@ function HomeScreen ({ route, navigation }) {
     console.log("refetching feed");
 
     async function retrieveData() { 
-      await fetch(`http://10.0.0.153:3000/feed/loadFeed/${context.userData.id}`)
+      await fetch(`http://localhost:3000/feed/loadFeed/${context.userData.id}`)
       .then(resp => resp.json())
       .then(resp =>
       {

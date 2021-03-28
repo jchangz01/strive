@@ -3,13 +3,6 @@ import Header from '../components/header'
 import Profile from '../components/profileView'
 
 export default function ProfileDetails({ route, navigation }) {
-    const p = {
-        username: 'jchangz',
-        userEmail: 'justinklchang@yahoo.com',
-        completedChallengeCount: '10',
-        followerCount: '50',
-        followingCount: '56'
-    }
     
     console.log("Loading user details");
 
@@ -18,11 +11,12 @@ export default function ProfileDetails({ route, navigation }) {
 
     React.useEffect(() => {
         const getProfileData = async () => {
-            await fetch(`http://10.0.0.153:3000/user/${route.params.profileId}`)
+            await fetch(`http://localhost:3000/user/${route.params.profileId}`)
             .then(resp => resp.json())
             .then(resp => {
                 console.log(resp)
                 setProfileInfo({
+                    id: resp.id,
                     username: resp.displayName,
                     userEmail: resp.email,
                     completedChallengeCount: resp.completedChallenges.length,
@@ -30,13 +24,13 @@ export default function ProfileDetails({ route, navigation }) {
                     followingCount: resp.following.length
                 });
 
-                fetch(`http://10.0.0.153:3000/post/get`, {
+                fetch(`http://localhost:3000/post/get`, {
                     method: 'POST',
                     body: JSON.stringify({ posts: resp.createdChallenges }),
                     headers: { 'Content-Type': 'application/json' }
                 })
-                .then(resp => resp.json())
-                .then(resp => setCreatedPosts(resp));
+                .then(resp2 => resp2.json())
+                .then(resp2 => setCreatedPosts(resp2));
             })
         }
         getProfileData();

@@ -88,7 +88,8 @@ export default function UserRouter()
                 ...req.body, 
                 owner: req.params.id,
                 ownerDisplayName: user.displayName, 
-                id: UUID 
+                id: UUID,
+                challengers: []
             });
 
             // update user createdChallenges and joinedChallenges list
@@ -146,7 +147,14 @@ export default function UserRouter()
         if (user && post)
         {
             user.joinedChallenges.push(req.params.postID);
-            post.challengers.push(req.params.id);
+
+            console.log("post challengers", post.challengers);
+
+            post.challengers.push({
+                id: req.params.id,
+                progress: 0,
+                blurb: ""
+            });
 
             await userRepo.save(user);
             await postRepo.save(post);
@@ -168,7 +176,7 @@ export default function UserRouter()
         if (user && post)
         {
             user.joinedChallenges?.splice(user.joinedChallenges?.indexOf(req.params.postID), 1);
-            post.challengers?.splice(post.challengers?.indexOf(req.params.id), 1);
+            post.challengers?.splice(post.challengers?.map(e => e.id).indexOf(req.params.id), 1);
             
             await userRepo.save(user);
             await postRepo.save(post);
