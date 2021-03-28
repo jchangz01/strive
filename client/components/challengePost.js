@@ -19,9 +19,29 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
     const context = React.useContext(UserContext);
     const [joined, setJoined] = React.useState(false);
     const [liked, setLiked] = React.useState(false);
-
+    const [duration, setDuration] = React.useState('')
     // do this to get around some weird issue where the Post wasn't rerendering on context change
     // triggers a redundant rerender, but this'll work for us for now
+    
+    React.useEffect(() => {
+        //calculate duration
+        console.log("UTC difference between start and end date: " + postData?.finishDate - postData?.created)
+        let days, hours, minutes, seconds, total_hours, total_minutes, total_seconds;
+        let miliseconds = postData?.finishDate - postData?.created;
+    
+        total_seconds = parseInt(Math.floor(miliseconds / 1000));
+        total_minutes = parseInt(Math.floor(total_seconds / 60));
+        total_hours = parseInt(Math.floor(total_minutes / 60));
+        days = parseInt(Math.floor(total_hours / 24));
+
+        seconds = parseInt(total_seconds % 60);
+        minutes = parseInt(total_minutes % 60);
+        hours = parseInt(total_hours % 24);
+
+        const durationS = days.toString() + "D " + hours.toString() + "H " + minutes.toString() + "M"
+        setDuration(durationS)
+    }, [postData])
+
     React.useEffect(() =>
     {
         setJoined(context.userData.joinedChallenges?.includes(postData.id))
@@ -36,7 +56,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         // update backend and frontend user obj
         if (joined)
         {
-            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/leave/${postData.id}`)
+            await fetch(`http://localhost:3000/user/${context.userData.id}/leave/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after leave attempt", resp));
 
@@ -49,7 +69,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         }
         else
         {
-            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/join/${postData.id}`)
+            await fetch(`http://localhost:3000/user/${context.userData.id}/join/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after join attempt", resp));
 
@@ -70,7 +90,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         // update backend and frontend user obj
         if (liked)
         {
-            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/unlike/${postData.id}`)
+            await fetch(`http://localhost:3000/user/${context.userData.id}/unlike/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after leave attempt", resp));
 
@@ -83,7 +103,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         }
         else
         {
-            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/like/${postData.id}`)
+            await fetch(`http://localhost:3000/user/${context.userData.id}/like/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after join attempt", resp));
 
@@ -129,7 +149,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
                     
                     <View style={styles.postDataView}> 
                         <Text style={styles.postDataCategory}>Duration</Text>
-                        <Text style={styles.postDataValue}>{postData?.duration}</Text>
+                        <Text style={styles.postDataValue}>{duration}</Text>
                     </View>
                     
                 </View>
@@ -213,7 +233,7 @@ const styles = StyleSheet.create ({
         fontSize: 12,
     },
     postDataValue: {
-        fontSize: 28,
+        fontSize: 24,
     },
  
     postInteractiveView: {
@@ -231,7 +251,7 @@ const styles = StyleSheet.create ({
         height: '72%',
         width: 1,
         backgroundColor: '#909090',
-        marginHorizontal: 24
+        marginHorizontal: 18
     },
     
 })
