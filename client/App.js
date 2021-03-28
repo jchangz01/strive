@@ -3,6 +3,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 //Import UI of each page
 import Home from './pages/Home'
@@ -43,7 +44,24 @@ function Secured () {
   console.log("userdata is", context.userData);
 
   return (
-    <Tab.Navigator >
+    <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') 
+              iconName="home";
+            else if (route.name === 'Search') 
+              iconName="search"
+            else if (route.name === 'Challenges') 
+              iconName="bullseye"
+            else if (route.name === 'Profile')
+              iconName="user"
+            // You can return any component that you like here!
+            return <Icon name={iconName} size={size} color={color} />;
+          },
+        })}
+      >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Search" component={Search} />
       <Tab.Screen name="Challenges" component={Challenges}/>
