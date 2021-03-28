@@ -9,6 +9,8 @@ import Post from '../components/challengePost'
 
 import { UserContext } from '../contexts/UserContext';
 
+// TODO: lift up requests into parent component AND USE ANOTHER CONTEXT!!
+
 function currentChallengesScreen({ navigation }) {
 
   const context = React.useContext(UserContext);

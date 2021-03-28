@@ -253,11 +253,26 @@ export default function UserRouter()
         {
             const idx = post.challengers?.map(e => e.id).indexOf(req.params.id);
 
+            // update the progress on the post
             post.challengers[idx].progress = req.body.progress;
             post.challengers[idx].blurb = req.body.blurb;
             post.challengers[idx].blurbUpdateTime = new Date().getTime();
-
             await postRepo.save(post);
+
+            // if the progress is 100%, add this post to the user's completed challenges
+            if (req.body.progress == 100)
+            {
+                console.log("CHALLENGE COMPLETED!!");
+
+                user.completedChallenges.push(req.params.postID);
+                await userRepo.save(user);
+            }
+            // if the progress isn't 100% and it's there already, remove it
+            else if (user.completedChallenges.includes(req.params.postID))
+            {
+                user.completedChallenges.splice(user.completedChallenges.indexOf(req.params.postID), 1);
+                await userRepo.save(user);
+            }
 
             // skip sending success message, and send modified post data instead
             // to avoid second fetch

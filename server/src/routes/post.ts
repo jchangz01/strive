@@ -23,15 +23,17 @@ export default function PostRouter()
         }
         else
         {
-            res.status(200).json([]);
+            // get all posts if there's no query
+            let posts = await postRepo.createQueryBuilder("post")
+                .getMany();
+
+            res.status(200).json(posts);
         }
     });
 
     // expects 1) posts[] <- arr of post UUIDs
     router.post('/get', async (req: Request, res: Response) =>
     {
-        console.log("hit post get");
-
         let posts: Post[] = [];
 
         for (let idx = 0; idx < req.body.posts?.length; idx++)
@@ -45,8 +47,6 @@ export default function PostRouter()
                 posts.push(post);
             }
         }
-
-        console.log("postsarr", posts);
 
         res.status(200).json(posts);
     });

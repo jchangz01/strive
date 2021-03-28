@@ -16,27 +16,25 @@ function SearchScreen({ navigation }) {
     console.log("searchQuery", e);
     setInput(e);
 
-    if (e)
-    {
-      await fetch('http://10.0.0.153:3000/post/search', {
-        method: 'POST',
-        body: JSON.stringify({
-          query: e
-        }),
-        headers: { 'Content-Type': 'application/json' }
-      })
-      .then(resp => resp.json())
-      .then(resp =>
-        {
-          console.log("search results from backend", resp);
-          setChallengePosts(resp);
-        });
-    }
-    else
-    {
-      setChallengePosts([]);
-    }
+    await fetch('http://localhost:3000/post/search', {
+      method: 'POST',
+      body: JSON.stringify({
+        query: e
+      }),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(resp => resp.json())
+    .then(resp =>
+      {
+        console.log("search results from backend", resp);
+        setChallengePosts(resp);
+      });
   }
+
+  React.useEffect(() =>
+  {
+    handleSearch()
+  }, []);
 
   const postList = challengePosts.map(post =>
   {

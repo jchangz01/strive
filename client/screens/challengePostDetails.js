@@ -36,6 +36,22 @@ function UpdateProgess ({ postID, setPostData }) {
             {
                 setPostData(resp);
             });
+
+        // update the frontend user object the same way we do on the backend
+        // if the progress is 100%, add this post to the user's completed challenges
+        if (progress == 100)
+        {
+            let newUserData = JSON.parse(JSON.stringify(context.userData));
+            newUserData.completedChallenges.push(postID);
+            context.setUserData(newUserData);
+        }
+        // if the progress isn't 100% and it's there already, remove it
+        else if (context.userData.completedChallenges.includes(postID))
+        {
+            let newUserData = JSON.parse(JSON.stringify(context.userData));
+            newUserData.completedChallenges.splice(newUserData.completedChallenges.indexOf(postID), 1);
+            context.setUserData(newUserData);
+        }
     }
 
     return (
