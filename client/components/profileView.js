@@ -9,44 +9,49 @@ import { UserContext } from '../contexts/UserContext';
 export default function ProfileView ({ personalProfile, profileInfo, createdPosts, navigation}) {  
   
   const context = React.useContext(UserContext);
-  
-  console.log("profileid", profileInfo.id);
-  console.log("following:", context.userData.following.includes(profileInfo.id));
 
-  const [following, setFollowing] = React.useState(context.userData.following.includes(profileInfo.id));
+  const [following, setFollowing] = React.useState(false);
 
-  const handleFollow = () => {
+  React.useEffect(() =>
+  {
+    console.log("profileid", profileInfo.id);
+    setFollowing(context.userData.following.includes(profileInfo.id));
+  }, [profileInfo.id]);
+
+  const handleFollow = async () => {
+
     setFollowing(!following);
 
-    console.log("personalprofile", profileInfo);
+    //update backend and frontend user obj
+    if (following)
+    {
+        await fetch(`http://localhost:3000/user/${context.userData.id}/unfollow/${profileInfo.id}`, 
+        {
+          method: 'delete'
+        })
+        .then(resp => resp.json())
+        .then(resp => console.log("resp after unfollow attempt", resp));
 
-    // update backend and frontend user obj
-    // if (following)
-    // {
-    //     await fetch(`http://localhost:3000/user/${context.userData.id}/unfollow/${postData.id}`)
-    //     .then(resp => resp.json())
-    //     .then(resp => console.log("resp after unfollow attempt", resp));
+        // make deep copy of user data, modify, then update state for the changes to propagate correctly
+        let newUserData = JSON.parse(JSON.stringify(context.userData));
+        newUserData.following.splice(newUserData.following.indexOf(profileInfo.id), 1);
+        context.setUserData(newUserData);
 
-    //     // make deep copy of user data, modify, then update state for the changes to propagate correctly
-    //     let newUserData = JSON.parse(JSON.stringify(context.userData));
-    //     newUserData.joinedChallenges.splice(newUserData.joinedChallenges.indexOf(postData.id), 1);
-    //     context.setUserData(newUserData);
+        console.log("unfollow attempt done");
+    }
+    else
+    {
+        await fetch(`http://localhost:3000/user/${context.userData.id}/follow/${profileInfo.id}`)
+        .then(resp => resp.json())
+        .then(resp => console.log("resp after join attempt", resp));
 
-    //     console.log("left attempt done");
-    // }
-    // else
-    // {
-    //     await fetch(`http://localhost:3000/user/${context.userData.id}/follow/${postData.id}`)
-    //     .then(resp => resp.json())
-    //     .then(resp => console.log("resp after join attempt", resp));
+        // make deep copy of user data, modify, then update state for the changes to propagate correctly
+        let newUserData = JSON.parse(JSON.stringify(context.userData));
+        newUserData.following.push(profileInfo.id);
+        context.setUserData(newUserData);
 
-    //     // make deep copy of user data, modify, then update state for the changes to propagate correctly
-    //     let newUserData = JSON.parse(JSON.stringify(context.userData));
-    //     newUserData.joinedChallenges.push(postData.id);
-    //     context.setUserData(newUserData);
-
-    //     console.log("join attempt done");
-    // }
+        console.log("follow attempt done");
+    }
 
   }
 

@@ -89,7 +89,14 @@ export default function UserRouter()
                 owner: req.params.id,
                 ownerDisplayName: user.displayName, 
                 id: UUID,
-                challengers: []
+                challengers: [
+                    {
+                        id: req.params.id,
+                        displayName: user.displayName,
+                        progress: 0,
+                        blurb: ""
+                    }
+                ]
             });
 
             // update user createdChallenges and joinedChallenges list
@@ -152,6 +159,7 @@ export default function UserRouter()
 
             post.challengers.push({
                 id: req.params.id,
+                displayName: user.displayName,
                 progress: 0,
                 blurb: ""
             });
