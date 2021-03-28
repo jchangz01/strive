@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
-
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 export default function progressMessage ({ data, personal, navigation }) {
     const [time, setTime] = React.useState('')
     React.useEffect(() => {
         setTime(new Date(parseInt(data.blurbUpdateTime)).toLocaleString());
-    },[])
+    },[data])
 
     return (
         <View style={styles.messageContainer}>

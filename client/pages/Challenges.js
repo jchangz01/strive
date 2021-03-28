@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import PostDetailScreen from '../screens/challengePostDetails'
@@ -23,7 +23,7 @@ function currentChallengesScreen({ navigation }) {
     {
       console.log(`getting joined challenges for user with id ${context.userData.id}`)
 
-      await fetch('http://10.0.0.153:3000/post/get', {
+      await fetch('http://localhost:3000/post/get', {
         method: 'POST',
         body: JSON.stringify({ posts: context.userData.joinedChallenges }),
         headers: { 'Content-Type': 'application/json' }
@@ -62,7 +62,7 @@ function pastChallengesScreen({ navigation }) {
     {
       console.log(`getting joined challenges for user with id ${context.userData.id}`)
 
-      await fetch('http://10.0.0.153:3000/post/get', {
+      await fetch('http://localhost:3000/post/get', {
         method: 'POST',
         body: JSON.stringify({ posts: context.userData.joinedChallenges }),
         headers: { 'Content-Type': 'application/json' }

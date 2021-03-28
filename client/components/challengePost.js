@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
-import completedBadge from './completedBadge'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { UserContext } from '../contexts/UserContext';
@@ -58,7 +57,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         // update backend and frontend user obj
         if (joined)
         {
-            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/leave/${postData.id}`)
+            await fetch(`http://localhost:3000/user/${context.userData.id}/leave/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after leave attempt", resp));
 
@@ -71,7 +70,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         }
         else
         {
-            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/join/${postData.id}`)
+            await fetch(`http://localhost:3000/user/${context.userData.id}/join/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after join attempt", resp));
 
@@ -92,7 +91,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         // update backend and frontend user obj
         if (liked)
         {
-            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/unlike/${postData.id}`)
+            await fetch(`http://localhost:3000/user/${context.userData.id}/unlike/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after leave attempt", resp));
 
@@ -105,7 +104,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
         }
         else
         {
-            await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/like/${postData.id}`)
+            await fetch(`http://localhost:3000/user/${context.userData.id}/like/${postData.id}`)
             .then(resp => resp.json())
             .then(resp => console.log("resp after join attempt", resp));
 
@@ -121,7 +120,7 @@ export default function ChallengePost ({postData, profileSelectOff, detailedMode
     return (
         <TouchableOpacity activeOpacity={1} onPress={detailedMode ? null : () => navigation.push('PostDetail', {postId: postData.id}) }>
             <View style={styles.postContainer}>
-                <CompletedBadge />
+                {context.userData?.completedChallenges?.includes(postData.id) ? <CompletedBadge /> : null}
                 <View style={styles.postProfileView}>
                     <TouchableOpacity 
                         activeOpacity={profileSelectOff ? 1 : null}

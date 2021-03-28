@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 import PostDetailScreen from '../screens/challengePostDetails'

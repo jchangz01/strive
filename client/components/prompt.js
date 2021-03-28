@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
 let refEmail, refPass, refRePass;
 export default function Prompt ({username, usernameChange, email, emailChange, pw, pwChange, rePw, rePwChange, submit, type}) {
@@ -28,8 +28,6 @@ export default function Prompt ({username, usernameChange, email, emailChange, p
             </TouchableOpacity>
         </>
     )
-
-    
 }
 
 const styles = StyleSheet.create({

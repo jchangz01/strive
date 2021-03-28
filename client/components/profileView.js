@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Touchable } from 'react-native';
-import { StyleSheet, Text, View, ScrollView, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Post from '../components/challengePost'
 
@@ -25,7 +24,7 @@ export default function ProfileView ({ personalProfile, profileInfo, setProfileI
     //update backend and frontend user obj
     if (following)
     {
-        await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/unfollow/${profileInfo.id}`, 
+        await fetch(`http://localhost:3000/user/${context.userData.id}/unfollow/${profileInfo.id}`, 
         {
           method: 'delete'
         })
@@ -46,7 +45,7 @@ export default function ProfileView ({ personalProfile, profileInfo, setProfileI
     }
     else
     {
-        await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/follow/${profileInfo.id}`)
+        await fetch(`http://localhost:3000/user/${context.userData.id}/follow/${profileInfo.id}`)
         .then(resp => resp.json())
         .then(resp => console.log("resp after join attempt", resp));
 
