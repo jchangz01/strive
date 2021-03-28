@@ -18,20 +18,14 @@ function ProfileScreen({ navigation }) {
   // update profile stuff accordingly
   React.useEffect(() =>
   {
-    setProfileInfo({
-      username: context.userData.displayName,
-      userEmail: context.userData.email,
-      completedChallengeCount: context.userData.completedChallenges.length,
-      followerCount: context.userData.followers.length,
-      followingCount: context.userData.following.length
-    });
+    setProfileInfo(context.userData);
 
     console.log("getting created posts for profile screen");
 
     // second request to get all the posts 
     const getPostsProfile = async () =>
     {
-      await fetch(`http://10.0.0.153:3000/post/get`, {
+      await fetch(`http://localhost:3000/post/get`, {
         method: 'POST',
         body: JSON.stringify({ posts: context.userData.createdChallenges }),
         headers: { 'Content-Type': 'application/json' }

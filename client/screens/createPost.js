@@ -32,12 +32,17 @@ export default function CreatePost ({navigation}) {
         console.log(currentDate)
     };
 
+    const handlePostCreate = async () =>
+    {
+        
+    };
+
     return (
         <>
             <View style={styles.headerContainer}>
                 <View style={styles.headerView}>
                     <Button title='Close' onPress={() => navigation.goBack()}/>
-                    <Button title='Create'/>
+                    <Button title='Create' onPress={handlePostCreate}/>
                 </View>
             </View>
             <ScrollView style={styles.container} onScrollBeginDrag={() => Keyboard.dismiss()}>

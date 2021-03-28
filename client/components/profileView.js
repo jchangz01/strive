@@ -6,7 +6,7 @@ import Post from '../components/challengePost'
 
 import { UserContext } from '../contexts/UserContext';
 
-export default function ProfileView ({ personalProfile, profileInfo, createdPosts, navigation}) {  
+export default function ProfileView ({ personalProfile, profileInfo, setProfileInfo, createdPosts, navigation}) {  
   
   const context = React.useContext(UserContext);
 
@@ -16,7 +16,7 @@ export default function ProfileView ({ personalProfile, profileInfo, createdPost
   {
     console.log("profileid", profileInfo.id);
     setFollowing(context.userData.following.includes(profileInfo.id));
-  }, [profileInfo.id]);
+  }, [profileInfo]);
 
   const handleFollow = async () => {
 
@@ -25,7 +25,7 @@ export default function ProfileView ({ personalProfile, profileInfo, createdPost
     //update backend and frontend user obj
     if (following)
     {
-        await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/unfollow/${profileInfo.id}`, 
+        await fetch(`http://localhost:3000/user/${context.userData.id}/unfollow/${profileInfo.id}`, 
         {
           method: 'delete'
         })
@@ -37,11 +37,16 @@ export default function ProfileView ({ personalProfile, profileInfo, createdPost
         newUserData.following.splice(newUserData.following.indexOf(profileInfo.id), 1);
         context.setUserData(newUserData);
 
+        // also update profileInfo state
+        let newOtherUserData = JSON.parse(JSON.stringify(profileInfo));
+        newOtherUserData.followers.splice(newOtherUserData.followers.indexOf(context.userData.id), 1);
+        setProfileInfo(newOtherUserData);
+
         console.log("unfollow attempt done");
     }
     else
     {
-        await fetch(`http://10.0.0.153:3000/user/${context.userData.id}/follow/${profileInfo.id}`)
+        await fetch(`http://localhost:3000/user/${context.userData.id}/follow/${profileInfo.id}`)
         .then(resp => resp.json())
         .then(resp => console.log("resp after join attempt", resp));
 
@@ -49,6 +54,11 @@ export default function ProfileView ({ personalProfile, profileInfo, createdPost
         let newUserData = JSON.parse(JSON.stringify(context.userData));
         newUserData.following.push(profileInfo.id);
         context.setUserData(newUserData);
+
+        // also update profileInfo state
+        let newOtherUserData = JSON.parse(JSON.stringify(profileInfo));
+        newOtherUserData.followers.push(context.userData.id);
+        setProfileInfo(newOtherUserData);
 
         console.log("follow attempt done");
     }
