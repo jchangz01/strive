@@ -34,23 +34,55 @@ function currentChallengesScreen({ navigation }) {
     getJoinedChallenges();
   }, [context.userData]);
 
-  const postList = joinedChallenges.map(post =>
-  {
+
+  const currentTimeUTC = new Date().getTime();
+
+  const currentPostList = joinedChallenges.filter(post => currentTimeUTC < post.finishDate)
+  const currentPostListComponent = currentPostList.map((post) => {
     return <Post key={post.id} postData={post} navigation={navigation}/>
-  });
+  })
 
   return (
     <ScrollView style={{ flex: 1 }}>
-      {postList}
+      {currentPostListComponent}
     </ScrollView>
   );
 }
 
 function pastChallengesScreen({ navigation }) {
-  //implement past Challenges fetch
+  const context = React.useContext(UserContext);
+  const [joinedChallenges, setJoinedChallenges] = React.useState([]);
+
+  // get all joined challenges from user
+  React.useEffect(() =>
+  {
+    const getJoinedChallenges = async () =>
+    {
+      console.log(`getting joined challenges for user with id ${context.userData.id}`)
+
+      await fetch('http://10.0.0.153:3000/post/get', {
+        method: 'POST',
+        body: JSON.stringify({ posts: context.userData.joinedChallenges }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(resp2 => resp2.json())
+      .then(resp2 => {
+        setJoinedChallenges(resp2); 
+      });
+    }
+    getJoinedChallenges();
+  }, [context.userData]);
+
+
+  const currentTimeUTC = new Date().getTime();
+
+  const pastPostList = joinedChallenges.filter(post => currentTimeUTC >= post.finishDate)
+  const pastPostListComponent = pastPostList.map((post) => {
+    return <Post key={post.id} postData={post} navigation={navigation}/>
+  })
   return (
     <ScrollView style={{ flex: 1 }}>
-
+      {pastPostListComponent}
     </ScrollView>
   );
 }

@@ -11,14 +11,6 @@ export default function ProfileView ({ personalProfile, profileInfo, setProfileI
   const context = React.useContext(UserContext);
 
   const [following, setFollowing] = React.useState(false);
-  const [personal, setPersonal] = React.useState(false)
-
-  React.useEffect(() => {
-    if (personalProfile) 
-      setPersonal(personalProfile);
-    else if (context.userData.id === profileInfo.id)
-      setPersonal(true);
-  },[])
 
   React.useEffect(() =>
   {
@@ -86,7 +78,7 @@ export default function ProfileView ({ personalProfile, profileInfo, setProfileI
                   <Text style={styles.profileUsername}>{profileInfo?.displayName}</Text>
                   <Text style={styles.profileUserEmail}>{profileInfo?.email}</Text>
                   {
-                    personalProfile ? null :
+                    context.userData.id === profileInfo.id || personalProfile ? null :
                     ( following ?
                       <TouchableOpacity onPress={handleFollow} style={styles.profileFollowingBtn} >
                         <Text>Following </Text>
