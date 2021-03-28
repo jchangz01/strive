@@ -31,10 +31,10 @@ export default function CreatePost ({navigation}) {
         setDate(new Date(yyyy, mm, dd+1, hr, min))
     },[])
 
-    const handleDateEndChange = (selectedDate) => {
+    const handleDateEndChange = (_, selectedDate) => {
         const currentDate = selectedDate || date;
         setDate(currentDate);
-        console.log(currentDate)
+        console.log("date updated to", currentDate);
     };
 
     const handlePostCreate = async () =>
